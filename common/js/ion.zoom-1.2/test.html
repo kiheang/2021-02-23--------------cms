@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+	<style>
+		.demo {
+  position: relative;
+  margin-bottom: 20px;
+}
+.gallery a {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  border: 1px solid #d4d4d4;
+  padding: 5px;
+  margin: 0 5px 10px 0;
+  outline: 0;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.gallery a:hover {
+  border-color: #900;
+}
+.gallery a img {
+  display: block;
+}
+	</style>
+	<link rel="stylesheet" type="text/css" href="http://ionden.com/a/plugins/ion.zoom/static/css/ion.zoom.css">
+	
+
+ </head>
+ <body>
+
+	<div class="demo gallery">
+			<a href="img/zoom/zoom-big-01.jpg" class="gallery_1"><img src="img/zoom/zoom-small-01.jpg" alt="" /></a>
+			<a href="img/zoom/zoom-big-02.jpg" class="gallery_1"><img src="img/zoom/zoom-small-02.jpg" alt="" /></a>
+			<a href="img/zoom/zoom-big-03.jpg" class="gallery_1"><img src="img/zoom/zoom-small-03.jpg" alt="" /></a>
+			<a href="img/zoom/zoom-big-04.jpg" class="gallery_1"><img src="img/zoom/zoom-small-04.jpg" alt="" /></a>
+			<a href="img/zoom/zoom-big-05.jpg" class="gallery_1"><img src="img/zoom/zoom-small-05.jpg" alt="" /></a>
+			<a href="img/zoom/zoom-big-06.jpg" class="gallery_1"><img src="img/zoom/zoom-small-06.jpg" alt="" /></a>
+	</div>
+  
+ </body>
+
+</html>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://ionden.com/a/plugins/static/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+	<script type="text/javascript" src="http://ionden.com/a/plugins/ion.zoom/static/js/ion-zoom/ion.zoom.js"></script>
+	<script type="text/javascript">
+		$(function(){
+    $(".gallery_1").ionZoom();
+		/*
+    $(".gallery_2").ionZoom({
+        visibleControls: false
+    });
+		*/
+
+    //$.ionZoom(".gallery_1, .gal > a");
+		/*
+    $.ionZoom(".gallery_3", {
+        has_controls: true
+    });
+		*/
+});
+	</script>

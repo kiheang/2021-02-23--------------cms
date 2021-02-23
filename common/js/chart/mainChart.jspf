@@ -1,0 +1,417 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<script async="" src="/common/js/chart/analytics.js"></script>
+<script src="/common/js/chart/Chart.min.js"></script>
+<script src="/common/js/chart/utils.js"></script>
+<script type="text/javascript">
+function createBarConfig(barChartData, tooltips) {
+	return {
+		type: 'bar',
+		data: barChartData,
+		options: {
+			responsive: false,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false,
+				text: 'Chart.js Bar Chart'
+			},
+			tooltips: tooltips,
+			scales: {
+				xAxes: [{
+		               gridLines: {
+		                  display: false
+		               }
+		            }],
+				yAxes: [{
+					type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+					display: true,
+					position: 'left',
+					id: 'y-axis-1',
+					ticks: {
+						min: 0,
+						max: 100,
+						stepSize: 25,
+					}
+				}, {
+					type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+					display: false,
+					position: 'right',
+					id: 'y-axis-2',
+					ticks: {
+						min: 0,
+						max: 100,
+						stepSize: 25,
+					},
+					gridLines: {
+						drawOnChartArea: false
+					}
+				}]
+			}
+		}
+	};
+}
+
+
+var DAYS = new Array(new Date(<fmt:formatDate value="${toDay}" pattern="YYYY" />, <fmt:formatDate value="${toDay}" pattern="MM" />, 0).getDate());
+for(var i=0; i<DAYS.length; i++) {	DAYS[i] = (i+1) + "일"; }
+
+var USER_CNT = ${calCntMap};
+var data1 = new Array();
+var data1_color = new Array();
+for(var i=0; i<DAYS.length; i++) { 
+	var key = "SUM_" + (i+1);
+	
+	data1.push(USER_CNT[key]);
+	
+	if(USER_CNT[key] > 100) {
+		data1_color.push('rgb(180, 67, 49)');
+	} else {
+		data1_color.push('rgb(70, 187, 205)');
+	}
+}
+
+var color = Chart.helpers.color;
+var barChartData1 = {
+		labels: DAYS,
+		datasets: [{
+			label: '진행중인 투표 건수',
+			backgroundColor: data1_color,
+			borderColor: data1_color,
+			borderWidth: 1,
+			barThickness : 20,
+			yAxisID: 'y-axis-1',
+			data: data1
+		}]
+
+	}
+
+USER_CNT = ${calCntMap2}
+var data2_1 = new Array();
+var data2_1_color = new Array();
+for(var i=0; i<DAYS.length; i++) { 
+	var key = "USER_1_SUM_" + (i+1);
+	
+	data2_1.push(USER_CNT[key]);
+	
+	if(USER_CNT[key] > 100) {
+		data2_1_color.push('rgb(0, 63, 255)');
+	} else {
+		data2_1_color.push('rgb(255, 192, 0)');
+	}
+}
+
+var data2_2 = new Array();
+var data2_2_color = new Array();
+for(var i=0; i<DAYS.length; i++) { 
+	var key = "USER_2_SUM_" + (i+1);
+	
+	data2_2.push(USER_CNT[key]);
+	
+	if(USER_CNT[key] > 100) {
+		data2_2_color.push('rgb(217, 55, 79)');
+	} else {
+		data2_2_color.push('rgb(25, 200, 177)');
+	}
+}	
+
+var barChartData2 = {
+	labels: DAYS,
+	datasets: [{
+		label: '정회원',
+		backgroundColor: data2_1_color,
+		borderColor: data2_1_color,
+		borderWidth: 1,
+		yAxisID: 'y-axis-1',
+		barThickness : 15,
+		data: data2_1
+	}, {
+		label: '준회원',
+		backgroundColor: data2_2_color,
+		borderColor: data2_2_color,
+		borderWidth: 1,
+		yAxisID: 'y-axis-2',
+		barThickness : 15,
+		data: data2_2
+	}]
+
+};
+
+var tooltips = {
+	// displayColors: false,
+	// backgroundColor: 'rgb(255,255,255)',
+	// titleFontColor: 'rgb(0,0,0)',
+	// titleAlign: 'center',
+	// bodyFontColor: 'rgb(255, 97, 3)',
+	 mode: 'index',
+	 intersect: true,
+	// yAlign: 'top'
+	enabled: false,
+	custom: function(tooltipModel) {
+		// Tooltip Element
+		var tooltipEl = document.getElementById('chartjs-tooltip');
+
+		// Create element on first render
+		if (!tooltipEl) {
+			tooltipEl = document.createElement('div');
+			tooltipEl.id = 'chartjs-tooltip';
+			tooltipEl.innerHTML = '<table style="margin-left: -4px; margin-top: 0px;"></table>';
+			document.body.appendChild(tooltipEl);
+		}
+
+		// Hide if no tooltip
+		if (tooltipModel.opacity === 0) {
+			tooltipEl.style.opacity = 0;
+			return;
+		}
+
+		// Set caret Position
+		tooltipEl.classList.remove('above', 'below', 'no-transform');
+		if (tooltipModel.yAlign) {
+			tooltipEl.classList.add(tooltipModel.yAlign);
+		} else {
+			tooltipEl.classList.add('no-transform');
+		}
+
+		function getBody(bodyItem) {
+			return bodyItem.lines;
+		}
+
+		// Set Text
+		if (tooltipModel.body) {
+			var titleLines = tooltipModel.title || [];
+			var bodyLines = tooltipModel.body.map(getBody);
+
+			var innerHtml = '<thead>';
+
+			innerHtml += '</thead><tbody>';
+
+			bodyLines.forEach(function(body, i) {
+				var bodySplit = body.toString().split(":");
+				if(tooltipModel.dataPoints[1] != null) {
+					innerHtml += '<tr><td><b>' + bodySplit[0] + " : <span style='color:#fe7028;'>" + bodySplit[1] + '명</span></b></td></tr>';
+				} else {
+					var month = $("#vote_progress_date").val().substring(4);
+					
+					month = month.charAt(0) == '0' ? month.substring(1) : month;
+					
+					innerHtml += '<tr><td style="text-align:center;"><b>'+ month + '월 ' + tooltipModel.dataPoints[0].xLabel + "<br><span style='color:#fe7028; font-size:16px'>" + bodySplit[1] + '</span><span style="color:#fe7028;">건</span></b></td></tr>';
+				}
+			});
+			innerHtml += '</tbody>';
+
+			var tableRoot = tooltipEl.querySelector('table');
+			tableRoot.innerHTML = innerHtml;
+		}
+
+		// `this` will be the overall tooltip
+		var position = this._chart.canvas.getBoundingClientRect();
+
+		// Display, position, and set styles for font
+		tooltipEl.style.opacity = 1;
+		tooltipEl.style.position = 'absolute';
+		// 데이터가 둘 이상일 경우
+		if(tooltipModel.dataPoints[1] != null) {
+			tooltipEl.classList.add('tooltip_type2');
+			tooltipEl.classList.remove('tooltip_type1');
+			//tooltipEl.style.top = $("#chart2").offset().top +  (tooltipModel.dataPoints[0].y < tooltipModel.dataPoints[1].y ? tooltipModel.dataPoints[0].y : tooltipModel.dataPoints[1].y) - 65 + 'px';
+			tooltipEl.style.top = $("#chart2").offset().top + 'px';
+			tooltipEl.style.left = window.event.pageX + 'px';
+			tooltipEl.style.padding = '27px 22px';
+			tooltipEl.style.fontSize = '12px';
+		} else {
+			tooltipEl.classList.add('tooltip_type1');
+			tooltipEl.classList.remove('tooltip_type2');
+			tooltipEl.style.top = $("#chart1").offset().top + tooltipModel.dataPoints[0].y - 65 + 'px';
+			tooltipEl.style.left = window.event.pageX + 'px';
+			tooltipEl.style.padding = '20px 30px 22px 23px';
+			tooltipEl.style.fontSize = '13px';
+		}
+		tooltipEl.style.pointerEvents = 'none';
+	}
+}
+
+var config = {
+		type: 'doughnut',
+		data: {
+			datasets: [{
+				data: [
+					${statInfo.USER_1_CNT},
+					${statInfo.USER_2_CNT} 
+				],
+				backgroundColor: [
+					'rgb(255, 192, 0)',
+					'rgb(24, 200, 177)',
+				],
+				hoverBackgroundColor: [
+					'rgb(235, 192, 2)',
+					'rgb(2, 184, 164)',
+				],
+				label: 'Dataset 1'
+			}],
+			labels: [
+				'회원현황(정회원)',
+				'회원현황(준회원)'
+			]
+		},
+		options: {
+			showAllTooltips: true,
+			cutoutPercentage: 40,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false,
+				text: 'Chart.js Doughnut Chart'
+			},
+			responsive: false,
+			animation: {
+				animateScale: true,
+				animateRotate: true
+			},
+			tooltips:{
+				// displayColors: false,
+				// backgroundColor: 'rgb(255,255,255)',
+				// titleFontColor: 'rgb(0,0,0)',
+				// titleAlign: 'center',
+				// bodyFontColor: 'rgb(255, 97, 3)',
+				 mode: 'index',
+				 intersect: true,
+				// yAlign: 'top'
+				enabled: false,
+			},
+			layout: {
+	            padding: {
+	                left: 0,
+	                right: 20,
+	                top: 20,
+	                bottom: 20
+	            }
+	        }
+		}
+	};
+
+window.onload = function() {
+	<c:if test="${fn:indexOf(authMenuList, '2000') > -1}">
+	var ctx1 = document.getElementById('chart1').getContext('2d');
+	window.Bar1 = new Chart(ctx1, createBarConfig(barChartData1, tooltips));
+	</c:if>
+	<c:if test="${fn:indexOf(authMenuList, '3000') > -1}">
+	var ctx2 = document.getElementById('chart2').getContext('2d');
+	window.Bar2 = new Chart(ctx2, createBarConfig(barChartData2, tooltips));
+	</c:if>
+	<c:if test="${fn:indexOf(authMenuList, '4000') > -1}">
+	var ctx3 = document.getElementById('chart3').getContext('2d');
+	window.myDoughnut = new Chart(ctx3, config);
+	var meta = window.myDoughnut.getDatasetMeta(0);
+	meta.data[0]._model.outerRadius =meta.data[0]._model.outerRadius + 15;
+	</c:if>
+
+}
+
+function updateChart(id, date, type) {
+	$.ajax({
+		url : '/admin/main/selectChartData.do',
+		dataType : 'json',
+		type : 'post',
+		data : { 'id'	: id 
+				,'date' : date 
+				,'type' : type
+				},
+		success : function(response){
+			if(response.resultStats.resultCode == 'ok'){
+				var resultMap = response.calCntMap;
+				var year = response.sch_year;
+				var month = response.sch_month;
+
+				// 투표 진행 현황일경우
+				if(type == 'V') {
+					$('#vote_progress_date').val(''+year+month);
+					$('.date').eq(0).html(year+ '년 <b>' + month + '</b>월');
+					
+					var DAYS = new Array(new Date(year*=1, month*=1, 0).getDate());
+					for(var i=0; i<DAYS.length; i++) {	DAYS[i] = (i+1) + "일"; }
+
+					var USER_CNT = resultMap;
+					
+					barChartData1.datasets.forEach(function(dataset) {
+						dataset.data = new Array();
+						for(var i=0; i<DAYS.length; i++) { 
+							var key = "SUM_" + (i+1);
+							dataset.data.push(USER_CNT[key]);
+						}
+					});
+					
+					window.Bar1.config.data.labels=DAYS;
+					window.Bar1.update();
+				} else {
+					$('#regist_progress_date').val(''+year+month);
+					$('.date').eq(1).html(year+ '년 <b>' + month + '</b>월');
+					
+					var DAYS = new Array(new Date(year*=1, month*=1, 0).getDate());
+					for(var i=0; i<DAYS.length; i++) {	DAYS[i] = (i+1) + "일"; }
+
+					var USER_CNT = resultMap;
+					
+					barChartData2.datasets[0].data = new Array();
+					barChartData2.datasets[0].backgroundColor = new Array();
+					barChartData2.datasets[0].borderColor = new Array();
+					
+					for(var i=0; i<DAYS.length; i++) { 
+						var key = "USER_1_SUM_" + (i+1);
+						
+						barChartData2.datasets[0].data.push(USER_CNT[key]);
+						if(USER_CNT[key] > 100) {
+							barChartData2.datasets[0].backgroundColor.push('rgb(217, 55, 79)');
+							barChartData2.datasets[0].borderColor.push('rgb(217, 55, 79)');
+						}else {
+							barChartData2.datasets[0].backgroundColor.push('rgb(255, 192, 0)');
+							barChartData2.datasets[0].borderColor.push('rgb(255, 192, 0)');
+						}
+					}
+
+					barChartData2.datasets[1].data = new Array();
+					barChartData2.datasets[1].backgroundColor = new Array();
+					barChartData2.datasets[1].borderColor = new Array();
+					for(var i=0; i<DAYS.length; i++) { 
+						var key = "USER_2_SUM_" + (i+1);
+						
+						barChartData2.datasets[1].data.push(USER_CNT[key]);
+						if(USER_CNT[key] > 100) {
+							barChartData2.datasets[1].backgroundColor.push('rgb(217, 55, 79)');
+							barChartData2.datasets[1].borderColor.push('rgb(217, 55, 79)');
+						}else {
+							barChartData2.datasets[1].backgroundColor.push('rgb(25, 200, 177)');
+							barChartData2.datasets[1].borderColor.push('rgb(25, 200, 177)');
+						}
+					}
+					
+					window.Bar2.config.data.labels=DAYS;
+					window.Bar2.update();
+				}
+				
+			} else {
+				fnAjaxErrorMsg(response);
+			}
+		}
+	});
+	return false;
+}
+
+$(function(){
+	$('.arr').click(function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		
+		updateChart($this.data('button'), $this.siblings('input').val(), $this.data('type'));
+	});
+	
+	$('.cur-month-btn').click(function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		
+		updateChart($this.data('button'), '<fmt:formatDate value="${toDay}" pattern="YYYYMM" />', $this.data('type'));
+	});
+});
+
+</script>

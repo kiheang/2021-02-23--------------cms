@@ -1,0 +1,3555 @@
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
+
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
+
+    <meta http-equiv="Cache-Control" content="no-cache" />
+
+    <meta http-equiv="Expires" content="0"/>
+
+    <meta http-equiv="Pragma" content="no-cache"/>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <meta name="robots" content="NONE" />
+
+    <title>MVOTING</title>
+
+
+
+    <script type="text/javascript" src="./common/js/jquery/jquery-1.11.1.min.js"></script>
+
+    <link href="./common/css/bootstrap/bootstrap.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="./common/js/bootstrap/bootstrap.js"></script>
+
+
+
+    <!-- AdminLTE Setup -->
+
+    <link rel="stylesheet" href="./common/css/AdminLTE/font-awesome.min.css">
+
+    <link rel="stylesheet" href="./common/css/AdminLTE/ionicons.min.css">
+
+    <!--
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    -->
+
+    <link rel="stylesheet" href="./common/css/AdminLTE/AdminLTE.css">
+
+    <link rel="stylesheet" href="./common/css/AdminLTE/skin-green-light.css">
+
+    <link rel="stylesheet" href="./common/css/AdminLTE/all-skins.min.css">
+
+    <script src="./common/js/AdminLTE/app.js"></script>
+
+    <script type="text/javascript" src="./common/js/common.js"></script>
+
+
+
+    <!-- 신규 작업 CSS -->
+
+    <link rel="stylesheet" href="./common/css/sub.css">
+
+    <link href="./common/js/jquery-ui/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script type="text/javascript" src="./common/js/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
+
+    <script type="text/javascript" src="./common/js/jquery/jquery.form.min.js"></script>
+
+    <script type="text/javascript" src="./common/js/insertVote.js"></script>
+
+</head>
+
+
+
+<script type="text/javascript">
+
+    //<![CDATA[
+    $(function(){
+        // 주민참여예산 클릭시는 주민참여예산 투표 만들기 페이지로 이동
+        $('#vote03, #vote04').click(function(e){
+            e.preventDefault();
+
+            location.href = '/admin/vote/insertFormVoteMgt.do?vote_ty_c=' + $(this).val();
+        });
+
+        // vote_ty_c 에 따른 화면 구성
+
+    });
+    //]]>
+</script></head>
+
+
+<body class="skin-green-light sidebar-mini skin-purple">
+<div class="wrapper">
+
+    <!-- 헤더  -->
+
+
+
+
+
+
+    <script type="text/javascript">
+        if(get('skinOption') !=null && get('skinOption') !='') {
+            if(get('curruntInit') !=null && get('curruntInit') !=''){ //해당 if문 추후 삭제 해도 무방
+                var currentSkin = get('skinOption');
+            }else{
+                var currentSkin = 'skin-purple';
+            }
+        } else {
+            var currentSkin = 'skin-purple';
+            //var currentSkin = 'skin-green-light';
+        }
+
+        $('body').addClass(currentSkin);
+        $('body').addClass(get('layoutOption'));
+
+        $(document).ready(function(){
+            //$('.skin-green-light').attr('class','skin-blue');
+
+            $("#topMenuWrap li").on("click", function(){
+                $("#topMenuWrap li").removeClass("active");
+                $(this).addClass("active");
+            })
+
+
+
+//	$('body').addClass('skin-blue');
+        })
+
+
+        function fnDownloadManual(){
+            $("#aform").attr({action:"/common/file/downCMS_Mvoting_UserGuide.do", method:"post" }).submit();
+        }
+
+
+        function fnClickMenuBtn(that) {
+            // 	$("[data-toggle='offcanvas']").click();
+
+            var screenSizes = $.AdminLTE.options.screenSizes;
+            if ( !$(that).parent().hasClass("open") ) {
+                //Enable sidebar push menu
+                if ($(window).width() > (screenSizes.sm - 1)) {
+                    if ($("body").hasClass('sidebar-collapse')) {
+// 				$("body").removeClass('sidebar-collapse').trigger('expanded.pushMenu');
+                    } else {
+                        $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                    }
+                }
+                //Handle sidebar push menu for small screens
+                else {
+                    if ($("body").hasClass('sidebar-open')) {
+// 				$("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                    } else {
+                        $("body").addClass('sidebar-open').trigger('expanded.pushMenu');
+                    }
+                }
+
+            }
+        }
+
+        function fnGoUpdateMyPageForm(){
+            document.location.href="/admin/user/updateFormMyPage.do";
+        }
+
+        function store(name, val) {
+            if (typeof (Storage) !== 'undefined') {
+                localStorage.setItem(name, val)
+            } else {
+                window.alert('레이아웃 설정 기능은 더 상위의 브라우저에서만 동작합니다.')
+            }
+        }
+
+        function get(name) {
+            if (typeof (Storage) !== 'undefined') {
+                return localStorage.getItem(name)
+            } else {
+                window.alert('레이아웃 설정 기능은 더 상위의 브라우저에서만 동작합니다.')
+            }
+        }
+
+    </script>
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="https://cmsmvoting.seoul.go.kr/" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>M</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>엠보팅CMS</b></span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" onclick="fnDownloadManual(); return false;">
+                            <span><i class="fa fa-download"></i></span>
+
+                            <span class="overflow">이용자메뉴얼</span>
+                        </a>
+                    </li>
+
+                    <!-- User Account Menu -->
+                    <li class="user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" onclick="fnGoUpdateMyPageForm();">
+                            <span><i class="fa fa-user"></i></span>
+                            <span class="overflow">관리자</span>
+                        </a>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/logout.do">
+                            <span><i class="fa fa-lock"></i></span>
+                            <span class="overflow">Logout</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" data-toggle="control-sidebar">
+                            <span><i class="fa fa-gears"></i></span>
+                        </a>
+                    </li>
+                    <li class="dropdown visible-xs-block">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" onclick="fnClickMenuBtn(this); return false;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true"><span><i class="fa fa-th"></i></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+
+
+
+
+
+                            <li class="user-header">
+
+
+                                <a href="javascript:fnChgLeftMenu(&#39;100010002000&#39;);">홈페이지관리</a>
+                            </li>
+
+
+
+
+                            <li class="user-header active">
+
+
+
+                                <a href="javascript:fnChgLeftMenu(&#39;100010004000&#39;);">투표관리</a>
+                            </li>
+
+
+
+
+
+                            <li class="user-header">
+
+
+                                <a href="javascript:fnChgLeftMenu(&#39;100010005000&#39;);">이벤트관리</a>
+                            </li>
+
+
+
+
+
+                            <li class="user-header">
+
+
+                                <a href="javascript:fnChgLeftMenu(&#39;100010001000&#39;);">운영 관리</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse">
+                <ul id="topMenuWrap" class="nav navbar-nav">
+
+
+
+
+
+                    <li>
+
+
+                        <a href="javascript:fnChgLeftMenu(&#39;100010002000&#39;);">홈페이지관리</a>
+                    </li>
+
+
+
+
+                    <li class="active">
+
+
+
+                        <a href="javascript:fnChgLeftMenu(&#39;100010004000&#39;);">투표관리</a>
+                    </li>
+
+
+
+
+
+                    <li>
+
+
+                        <a href="javascript:fnChgLeftMenu(&#39;100010005000&#39;);">이벤트관리</a>
+                    </li>
+
+
+
+
+
+                    <li>
+
+
+                        <a href="javascript:fnChgLeftMenu(&#39;100010001000&#39;);">운영 관리</a>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+            <!-- Single button -->
+
+
+
+        </nav>
+    </header>
+
+
+    <!-- 좌측 메뉴 -->
+
+
+
+
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            //초기메뉴 세팅(운영관리)
+            fnChgLeftMenu("100010004000");
+
+            // 템플릿 하단으로 숨기기위해 메뉴 길이 늘림
+            $(".main-sidebar").css("height", $(".wrapper")[0].scrollHeight);
+
+            // 사이드바 체크박스
+            if(get('layoutOption') !=null && get('layoutOption') !='') {
+                $('#layout-list [data-layout="'+ get('layoutOption') +'"]').prop("checked", true);
+            }
+
+
+
+            // 이용문의 새글 체크
+            var checkAlimInterval = setInterval(function() {
+                var date = new Date();
+
+                if(date.getSeconds() == 0 || date.getSeconds() == 30) {
+                    var param = {
+                        'interval' : 30
+                    };
+                    $.ajax({
+                        url : '/common/inc/checkAlimAjax.do',
+                        type : 'post',
+                        dataType : 'json',
+                        data : param,
+                        async: false,
+                        success : function(response){
+                            if(response.resultStats.resultCode != 'error') {
+                                if(response.resultStats.checkYnList.USE_CHECK_YN == 'Y') {
+                                    alert("시민 이용문의에 새글이 등록되었습니다.");
+                                }  if(response.resultStats.checkYnList.ADMIN_CHECK_YN == 'Y') {
+                                    alert("관리자 이용문의에 새글이 등록되었습니다.");
+                                }
+                            } else {
+                                alert(response.resultStats.resultMsg);
+                                clearInterval(checkAlimInterval);
+
+                                location.reload(true);
+                            }
+                        },
+                        error : function(){
+                        }
+                    });
+                }
+            }, 500);
+
+
+        });
+
+
+        $(function () {
+            var currentSkin = get('skinOption') == null ? 'skin-purple' : get('skinOption');
+            var currentLayout = '';
+            var currentSidebarskin = '';
+            var curruntInit = '' //해당값 추후 삭제 해도 무방
+
+            $('#layout-skins-list [data-skin]').click(function (e) {
+                e.preventDefault();
+                var skinName = $(this).data('skin');
+                $('body').removeClass(currentSkin);
+                $('body').addClass(skinName);
+                currentSkin = skinName;
+
+                store('skinOption', currentSkin);
+                store('curruntInit', 'true');
+            })
+
+
+            $('#layout-list [data-layout]').click(function () {
+                var layoutName = $(this).data('layout');
+
+                $('body').removeClass(layoutName);
+
+                if(currentLayout != layoutName) {
+                    if($(this).prop("checked") == true) {
+                        $(	'body').addClass(layoutName);
+                        currentLayout = layoutName;
+                    }
+                } else {
+                    currentLayout ='';
+                }
+
+                store('layoutOption', currentLayout);
+            })
+        })
+
+
+        function store(name, val) {
+            if (typeof (Storage) !== 'undefined') {
+                localStorage.setItem(name, val)
+            } else {
+                window.alert('레이아웃 설정 기능은 더 상위의 브라우저에서만 동작합니다.')
+            }
+        }
+
+        function get(name) {
+            if (typeof (Storage) !== 'undefined') {
+                return localStorage.getItem(name)
+            } else {
+                window.alert('레이아웃 설정 기능은 더 상위의 브라우저에서만 동작합니다.')
+            }
+        }
+
+
+        function fnChgLeftMenu(menu_id){
+
+            var param = {
+                'up_menu_id' : menu_id
+            };
+
+            $.ajax({
+                url : '/common/inc/selectLeftMenuListAjax.do',
+                type : 'post',
+                dataType : 'json',
+                data : param,
+                async: false,
+                success : function(response){
+                    if(response.resultStats.resultCode == 'ok'){
+
+                        var subMenuList = response.resultStats.leftMenuList;
+                        var cntList = response.resultStats.cntList;
+                        var sideHtml = '';
+                        var menuClassStr = '';
+                        var menuNum = 0;
+                        var viewSub = '';
+                        var menu = '';
+
+                        //메뉴 초기화
+                        $("#sidebar").html("");
+                        $("#tmpMenu").html("");
+
+                        //===========================================
+                        for(var i = 0; i < subMenuList.length; i++){
+
+                            //tmpMenu에서 DOM 로딩
+                            sideHtml = $("#tmpMenu").html();
+                            menuClassStr = '';
+
+                            if(subMenuList[i].MENU_ID == "1000100040002000"){
+                                menuClassStr = 'active';
+                            }
+
+                            if(subMenuList[i].MENU_LEVEL == '4'){
+
+                                //메뉴유형(MENU_TY_CODE)
+                                //카테고리	10
+                                //메뉴	20
+                                //기능	30
+                                if(subMenuList[i].MENU_TY_CODE == '10'){
+                                    sideHtml += '<li data-id="' + menu_id + '" class="treeview ' + menuClassStr + '">';
+                                    if(cntList[subMenuList[i].MENU_ID] > 0  && true) {
+                                        sideHtml += '<a href=""><i class="fa fa-angle-double-right"></i><span>' + subMenuList[i].MENU_NM + '</span><span class="pull-right-container"><small class="label no_margin_top pull-right bg-red">new</small></span></a>';
+                                    } else {
+                                        sideHtml += '<a href=""><i class="fa fa-angle-double-right"></i><span>' + subMenuList[i].MENU_NM + '</span><i class="fa fa-angle-left pull-right"></i></a>';
+                                    }
+                                    sideHtml += '<ul class="treeview-menu">';
+                                    sideHtml += '</ul>';
+                                    sideHtml += '</li>';
+                                    menu = true;
+                                }
+                                else{
+                                    sideHtml += '<li data-id="' + menu_id + '" class="' + menuClassStr + '">';
+                                    sideHtml += '<a href="javascript:fnGoUrl(\'' + subMenuList[i].URL + '\', \'' + menu_id + '\');" ><i class="fa fa-angle-double-right"></i><span>' + subMenuList[i].MENU_NM + '</span></a>';
+                                    sideHtml += '</li>';
+                                    menu = false;
+                                }
+
+                                viewSub = menuClassStr;
+
+                                //tmpMenu에서 DOM 저장
+                                $("#tmpMenu").html(sideHtml);
+                            }
+                            else if(subMenuList[i].MENU_LEVEL == '5'){
+                                if(menu)
+                                {
+                                    var off = '';
+                                    if(viewSub == 'active'){ off = 'active'; }
+
+                                    //tmpMenu에서 4뎁스 생성
+                                    if(cntList[subMenuList[i].MENU_ID] > 0 && true ) {
+                                        $("#tmpMenu").find("ul").eq(-1).append('<li class="' + menuClassStr + '"><a href="javascript:fnGoUrl(\'' + subMenuList[i].URL + '\', \'' + menu_id + '\');"><i class="fa"></i>' + subMenuList[i].MENU_NM + '<span class="pull-right-container"><small class="label no_margin_top pull-right bg-yellow">'+ cntList[subMenuList[i].MENU_ID] +'</small></span></a></li>');
+                                    } else {
+                                        $("#tmpMenu").find("ul").eq(-1).append('<li class="' + menuClassStr + '"><a href="javascript:fnGoUrl(\'' + subMenuList[i].URL + '\', \'' + menu_id + '\');"><i class="fa"></i>' + subMenuList[i].MENU_NM + '</a></li>');
+                                    }
+                                }
+                            }
+                        }
+                        $("#sidebar").append($("#tmpMenu").html());
+                    } else {
+                    }
+                },
+                error : function(){
+                }
+            });
+        }
+
+        function fnGoUrl(url, top_menu_id) {
+            var f = document.menuForm;
+// 	f.top_menu_id.value = top_menu_id;
+            f.action = url;
+            f.submit();
+
+        }
+    </script>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar" style="height: 2712px;">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar Menu -->
+            <ul id="sidebar" class="sidebar-menu"><li data-id="100010004000" class="treeview "><a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do"><i class="fa fa-angle-double-right"></i><span>투표목록</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li class=""><a href="javascript:fnGoUrl(&#39;/admin/vote/selectPageListVoteMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표목록</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/voteWasteBasket/selectPageListVoteWasteBasketMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>휴지통</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/smsSpecificPerson/selectPageListSmsSpecificPerson.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>SMS발송대상</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/smsSpecificPerson/selectPageListSmsHistory.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>SMS발송이력</a></li></ul></li><li data-id="100010004000" class="active"><a href="javascript:fnGoUrl(&#39;/admin/vote/insertFormVoteMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>투표만들기</span></a></li><li data-id="100010004000" class="treeview "><a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do"><i class="fa fa-angle-double-right"></i><span>투표그룹 관리</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li class=""><a href="javascript:fnGoUrl(&#39;/admin/voteGroup/selectPageListVoteGroupMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표그룹 목록</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/voteGroup/inserFormVoteGroupMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표그룹 등록폼</a></li></ul></li><li data-id="100010004000" class=""><a href="javascript:fnGoUrl(&#39;/admin/voteBest/selectListVoteBestMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>BEST 투표 관리</span></a></li><li data-id="100010004000" class=""><a href="javascript:fnGoUrl(&#39;/admin/policy/selectPageListPolicyMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>정책 반영</span></a></li><li data-id="100010004000" class=""><a href="javascript:fnGoUrl(&#39;/admin/prhibtWrd/selectPrhibtWrdPageList.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>금지 단어 관리</span></a></li><li data-id="100010004000" class="treeview "><a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do"><i class="fa fa-angle-double-right"></i><span>블록체인</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li class=""><a href="javascript:fnGoUrl(&#39;/admin/vote/selectPageListFailedBlckChainVoteMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표 검증중 리스트</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/vote/selectPageListBlockFailLogMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>블록 해시 업데이트 실패 로그</a></li></ul></li></ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+        <div id="tmpMenu" style="display:none;"><li data-id="100010004000" class="treeview "><a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do"><i class="fa fa-angle-double-right"></i><span>투표목록</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li class=""><a href="javascript:fnGoUrl(&#39;/admin/vote/selectPageListVoteMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표목록</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/voteWasteBasket/selectPageListVoteWasteBasketMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>휴지통</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/smsSpecificPerson/selectPageListSmsSpecificPerson.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>SMS발송대상</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/smsSpecificPerson/selectPageListSmsHistory.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>SMS발송이력</a></li></ul></li><li data-id="100010004000" class="active"><a href="javascript:fnGoUrl(&#39;/admin/vote/insertFormVoteMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>투표만들기</span></a></li><li data-id="100010004000" class="treeview "><a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do"><i class="fa fa-angle-double-right"></i><span>투표그룹 관리</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li class=""><a href="javascript:fnGoUrl(&#39;/admin/voteGroup/selectPageListVoteGroupMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표그룹 목록</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/voteGroup/inserFormVoteGroupMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표그룹 등록폼</a></li></ul></li><li data-id="100010004000" class=""><a href="javascript:fnGoUrl(&#39;/admin/voteBest/selectListVoteBestMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>BEST 투표 관리</span></a></li><li data-id="100010004000" class=""><a href="javascript:fnGoUrl(&#39;/admin/policy/selectPageListPolicyMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>정책 반영</span></a></li><li data-id="100010004000" class=""><a href="javascript:fnGoUrl(&#39;/admin/prhibtWrd/selectPrhibtWrdPageList.do&#39;, &#39;100010004000&#39;);"><i class="fa fa-angle-double-right"></i><span>금지 단어 관리</span></a></li><li data-id="100010004000" class="treeview "><a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do"><i class="fa fa-angle-double-right"></i><span>블록체인</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li class=""><a href="javascript:fnGoUrl(&#39;/admin/vote/selectPageListFailedBlckChainVoteMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>투표 검증중 리스트</a></li><li class=""><a href="javascript:fnGoUrl(&#39;/admin/vote/selectPageListBlockFailLogMgt.do&#39;, &#39;100010004000&#39;);"><i class="fa"></i>블록 해시 업데이트 실패 로그</a></li></ul></li></div>
+
+        <form name="menuForm" method="POST" action="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do">
+            <!-- 		<input type="hidden" name="top_menu_id"/> -->
+        </form>
+
+        <!-- 템플릿 주석처리 -->
+        <ul class="sidebar-menu" style="display:none; position:absolute; bottom: 0px;">
+            <li>
+                <a href="https://cmsmvoting.seoul.go.kr/admin/template.do"><span>템플릿</span></a>
+            </li>
+        </ul>
+
+    </aside>
+
+
+    <aside class="control-sidebar control-sidebar-light">
+        <!-- Content of the sidebar goes here -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div id="control-sidebar-theme-demo-options-tab" class="tab-pane active">
+                <div>
+                    <h4 class="control-sidebar-heading">레이아웃 설정</h4>
+                    <div id="layout-list">
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                <input type="checkbox" data-layout="fixed" class="pull-right">상단 메뉴 고정</label>
+                            <p>상단 메뉴가 항상 고정됩니다. <br>해상도 고정과 동시에 사용할 수 없습니다.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                <input type="checkbox" data-layout="layout-boxed" class="pull-right"> 해상도 고정</label>
+                            <p>사용자의 모니터에서 화면이 일부 잘려 보일 때 체크해 주세요.</p>
+                        </div>
+                    </div>
+
+                    <h4 class="control-sidebar-heading">테마</h4>
+                    <ul id="layout-skins-list" class="list-unstyled clearfix">
+                        <li style="float:left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Blue</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.1)" class="clearfix">
+                                    <span style="display: block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #222"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Black</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                                    <span class="bg-purple" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Purple</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-green" tyle="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                                    <span class="bg-green" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Green</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                                    <span class="bg-red" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Red</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                                    <span class="bg-yellow" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Yellow</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                    <span class="bg-light-blue" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin" style="font-size: 12px">Blue Light</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.1)" class="clearfix">
+                                    <span style="display: block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin" style="font-size: 12px">Black Light</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                                    <span class="bg-purple" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin" style="font-size: 12px">Purple Light</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                                    <span class="bg-green" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin" style="font-size: 12px">GreenLight</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                                    <span class="bg-red" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin" style="font-size: 12px">Red Light</p>
+                        </li>
+                        <li style="float: left; width: 33.33333%; padding: 5px;">
+                            <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0, 0, 0, 0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                                    <span class="bg-yellow" style="display: block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display: block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display: block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin" style="font-size: 12px">Yellow Light</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- The sidebar's background -->
+    <!-- This div must placed right after the sidebar for it to work-->
+    <div class="control-sidebar-bg" style="position: fixed; height: auto;"></div>
+
+
+    <!-- 레이어팝업 -->
+
+
+    <script type="text/javascript">
+        function openMap(id_poiname, id_addr, id_lat, id_lng, id_ctype, id_cdata) {
+            var url = '/selectLocation/openMap_iframe.jsp';
+            $('#iframe').attr("src", url/* +param */);
+        }
+
+
+
+        // 신규 지도 API 소스
+        function setCoord_callback(id_lng, id_lat, id_naddr, id_oaddr, id_cdata, distanceValue) {
+            /* 	alert(	"mgis_address_new : " + id_naddr
+                         + "\nmgis_address_old : " + id_oaddr
+                         + "\nmgis_latitude : " + id_lat
+                         + "\nmgis_longitude : " + id_lng
+                         + "\nmgis_cdata : " + id_cdata
+                         + "\ndistanceValue : " + distanceValue
+                         ); */
+
+            $("#mgis_address").val(id_oaddr);
+            $("#mgis_address_new").val(id_naddr);
+            $("#mgis_address_old").val(id_oaddr);
+            $("#mgis_latitude").val(id_lat);
+            $("#mgis_longitude").val(id_lng);
+            $("#mgis_cdata").val(id_cdata);
+            $("#distanceValue").val(distanceValue);
+        }
+
+        /* 위치정보 최종 선택(점) */
+        function fnSelectLocationCircleEnd(){
+            var chked_val = "";
+            var chked_val_nm = "";
+            var addr = $("#mgis_address").val();
+            var lat = $("#mgis_latitude").val();
+            var lng = $("#mgis_longitude").val();
+            var dist = $("#distanceValue").val();
+
+            if(addr != "" && lat != "" && dist == ""){
+                alert("반경을 선택해 주세요.");
+                return false;
+            }
+
+            if(dist != "" && addr == "" && lat == ""){
+                alert("위치 좌표을 선택해 주세요.");
+                return false;
+            }
+
+            if(addr != "" && lat != "" && dist != ""){
+                chked_val_nm = addr + ", 반경 " + dist + " 미터";
+                chked_val = addr + "," + lat + "," + lng + "," + dist;
+                $("#targetSource").val(chked_val_nm);
+                $("#submittargetSource").val(chked_val);
+            }
+
+            $("#trget_sourc").val("003");
+            toggle_object('vote-gps-pop');
+        }
+
+        /* 위치정보 최종 선택(구역) */
+        function fnSelectLocationZoneEnd(){
+            var chked_val = "";
+            var chked_val_nm = "";
+            var addr = $("#mgis_address").val();
+            var lat = $("#mgis_latitude").val();
+            var lng = $("#mgis_longitude").val();
+            var cdata = $("#mgis_cdata").val();
+
+
+            if(addr != "" && lat != "" && cdata != ""){
+                chked_val_nm = addr + " 외 " + (cdata.match(/\]\,\[/g).length -1) + "개 점";
+                chked_val = addr + "," + lat + "," + lng + "," + cdata;
+                $("#targetSource").val(chked_val_nm);
+                $("#submittargetSource").val(chked_val);
+            } else {
+                alert("구역을 선택해 주세요.");
+                return;
+            }
+
+            $("#trget_sourc").val("006");
+            toggle_object('vote-gps-pop');
+        }
+
+        //특정인 지도상 거리 라디오 버튼 컨트롤
+        function fnSelectMapDist() {
+            var isChkVal = $("input:radio[name='distance']:checked").val();
+            if(isChkVal == "userText"){
+                $("#distanceText").attr("disabled", false);
+            }else{
+                $("#distanceText").attr("disabled", true);
+                $("#distanceText").val("");
+            }
+        }
+
+        //특정인 지도상 거리 라디오 버튼 적용
+        function fnSelectMapDistEnd() {
+            var isChkVal = $("input:radio[name='distance']:checked").val();
+            if(isChkVal == "userText"){
+                $("#distanceValue").val($("#distanceText").val());
+            }else{
+                $("#distanceValue").val(isChkVal);
+            }
+            //넓이 설정할때 써클설정까지 같이처리함
+            $('#iframe')[0].contentWindow.circle1($("#mgis_latitude").val(),$("#mgis_longitude").val(),$("#distanceValue").val());
+        }
+
+        var isOk = false;
+        var targetArray = [];
+
+        //투표상태 변경시 화면 제어
+        function fnChangetargetSource(val) {
+            $(".targetSourceBtn").attr({"onclick" : "toggle_object('popup"+ val +"'); return false;"});
+            $('#targetSource').val("");
+            $('#submittargetSource').val("");
+            $('#targetSourceFileName').val("");
+            $('#submitTargetSourceExcelFile').val("");
+        }
+
+        //특정인 목록에서 선택시 레이어 초기화
+        function fnSelectObjList() {
+            fnVoteGroupLsit();
+        }
+
+        /* 적용여부 초기화 */
+        function fnIsOkReset(){
+            isOk = false;
+            $("#totCnt").html("0");
+        }
+
+        /* 대상 선택 */
+        function showType(id){
+            $("#excel_upload").val("");
+            $('.area001').css('display', 'none');
+            $('.area002').css('display', 'none');
+            $('.area003').css('display', 'none');
+            $('.area' + id).css('display', '');
+
+            if(id == "001"){
+                fnSelectGuCdAjax();
+            }else if(id == "003"){
+
+            }
+        }
+
+        /* 구 select */
+        function fnSelectGuCdAjax(){
+            fnIsOkReset();
+            jQuery.ajax( {
+                type : 'POST',
+                dataType : 'json',
+                url : '/admin/voteGroup/selectGuCdAjax.do',
+                success : function(param) {
+                    if(param.resultStats.resultCode == "error"){
+                        //alert(param.resultStats.resultMsg);
+                        alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                        return;
+                    }
+
+                    var list = param.resultStats.resultList;
+                    var innerHtml = "";
+                    //지역정보 선택
+                    var targetSourceType = $("#trget_type option:selected").val();
+                    if(targetSourceType == "02"){
+                        for(var i=0; i < list.length; i++){
+                            innerHtml += '	 <li> ';
+                            innerHtml += '		<a href="#" onclick="fnSelectDongCdAjax(\''+list[i].ADDR_GU_CD+'\'); return false;">' + list[i].ADDR_GU_NM + '</a> ';
+                            innerHtml += '	 </li> ';
+                        }
+                        $(".localGuListArea").html(innerHtml);
+                    }else{
+                        innerHtml += '	<select class="form-control input-sm guHedden" id="addr_gu_cd" name="addr_gu_cd" onchange="fnSelectDongCdAjax(this.value);"> ';
+                        innerHtml += '		<option value="000">전체</option> ';
+                        for(var i=0; i < list.length; i++){
+                            innerHtml += '	<option value=\"'+list[i].ADDR_GU_CD+'\">' + list[i].ADDR_GU_NM + '</option> ';
+                        }
+                        innerHtml += '	</select> ';
+
+                        $(".addGuCd").html(innerHtml);
+                    }
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+        }
+
+        /* 동 select */
+        function fnSelectDongCdAjax(addr_gu_cd){
+            fnIsOkReset();
+            var param = {'addr_gu_cd' : addr_gu_cd};
+            jQuery.ajax( {
+                type : 'POST',
+                dataType : 'json',
+                url : '/admin/voteGroup/selectDongCdAjax.do',
+                data : param,
+                success : function(param) {
+                    if(param.resultStats.resultCode == "error"){
+                        //alert(param.resultStats.resultMsg);
+                        alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                        return;
+                    }
+
+                    var list = param.resultStats.resultList;
+                    var innerHtml = "";
+
+                    var targetSourceType = $("#trget_type option:selected").val();
+                    if(targetSourceType == "02"){
+                        innerHtml += '	 <li> ';
+                        innerHtml += '		<input type="checkbox" onclick="fnDongAllCheck(); " class="dongAll" id="dongId_0" name="dongNm" value="'+list[0].ADDR_GU_CD+'111#'+list[0].ADDR_GU_NM+' 전체#dongId_0"> ';
+                        innerHtml += '		<label for="dongId_0">전체</label> ';
+                        innerHtml += '	 </li> ';
+                        for(var i=0; i < list.length; i++){
+                            var dongNm = list[i].ADDR_GU_NM +" "+ list[i].ADDR_DONG_NM;
+                            var addrCd = list[i].ADDR_GU_CD + list[i].ADDR_DONG_CD;
+                            var cnt = i + 1;
+                            innerHtml += '	 <li> ';
+                            innerHtml += '		<input type="checkbox" class="dongNm" id="dongId_'+cnt+'" name="dongNm" value="'+addrCd+'#'+dongNm+'#dongId_'+cnt+'"> ';
+                            innerHtml += '		<label for="dongId_'+cnt+'">' + list[i].ADDR_DONG_NM + '</label> ';
+                            innerHtml += '	 </li> ';
+                        }
+
+                        $(".localDongListArea").html(innerHtml);
+                    }else{
+                        innerHtml += '	<select class="form-control input-sm guHedden" id="addr_dong_cd" name="addr_dong_cd" onchange="fnIsOkReset();"> ';
+                        innerHtml += '		<option value="111">전체</option> ';
+                        for(var i=0; i < list.length; i++){
+                            innerHtml += '	<option value=\"'+list[i].ADDR_DONG_CD+'\">' + list[i].ADDR_DONG_NM + '</option> ';
+                        }
+                        innerHtml += '	</select> ';
+
+                        $(".addDongCd").html(innerHtml);
+                    }
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+        }
+
+        /* 행정동 선택시 선택 지역으로 이동 */
+        var targetDongArray = [];
+        function fnSelectAddrCode(){
+            /* var checked = $("input:checkbox[name='dongAll']").is(":checked");
+            var attrNm = "dongNm";
+            if(checked){
+                attrNm = "dongAll";
+            }
+
+            $(":checkbox[name='"+attrNm+"']:checked").each(function(index,val){
+                if (targetDongArray.indexOf(val.value) > -1) {
+                     alert('이미 추가하였습니다.');
+                } else {
+                    targetDongArray.push(val.value);
+                    displaySelectTargetDong();
+                }
+            }); */
+
+            $(":checkbox[name='dongNm']:checked").each(function(index,val){
+                if (targetDongArray.indexOf(val.value) > -1) {
+                    /* alert('이미 추가하였습니다.'); */
+                } else {
+                    targetDongArray.push(val.value);
+                    displaySelectTargetDong();
+                }
+            });
+        }
+
+        //동 전체 선택시
+        function fnDongAllCheck() {
+            var checked = $("input:checkbox[class='dongAll']").is(":checked");
+            if(checked){
+                $("input:checkbox[class='dongNm']").prop("checked", false);
+                $("input:checkbox[class='dongNm']").attr("disabled", true);
+            }else{
+                $("input:checkbox[class='dongNm']").attr("disabled", false);
+            }
+        }
+
+        /* 행정동 팝업 선택명단 리스트 */
+        function displaySelectTargetDong() {
+            var appendHtml = "";
+            var chked_val = "";
+            $.each( targetDongArray, function(index , item) {
+                var array = item.split('#'); /* 종류(D,M), 부서코드, 이름, 전화번호(부서시공백) */
+                appendHtml += "<li><a href='javascript:removeTargetDong(\"" + index + "\",\"" + array[2] + "\");' class='btn_delete'>삭제</a> " + array[1] + "</li>";
+                chked_val += array[0] + ",";
+            });
+
+            var chked_valSize = chked_val.length;
+            chked_val = chked_valSize > 0 ? chked_val.substr(0, chked_valSize-1) : chked_val;
+
+            $(".selectLocalArea").html(appendHtml);
+
+            var param = {'addr_cd' : chked_val};
+            jQuery.ajax( {
+                type : 'POST',
+                dataType : 'json',
+                url : '/admin/vote/selectDongTargetCntAjax.do',
+                data : param,
+                success : function(param) {
+                    if(param.resultStats.resultCode == "error"){
+                        //alert(param.resultStats.resultMsg);
+                        alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                        return;
+                    }
+
+                    var totCnt = param.resultStats.totCnt;
+                    $(".dongTotCntArea").text(totCnt + " 명");
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+        }
+
+        /* 지역정보 최종 선택 */
+        function fnSelectAddrCodeEnd(){
+            var chked_val = "";
+            var chked_val_nm = "";
+
+            $.each( targetDongArray, function(index , item) {
+                var array = item.split('#'); /* 주소코드#주소명 */
+                chked_val += array[0] + ",";
+                chked_val_nm += array[1] + ",";
+            });
+
+            var chked_valSize = chked_val.length;
+            chked_val = chked_valSize > 0 ? chked_val.substr(0, chked_valSize-1) : chked_val;
+            var chked_val_nmSize = chked_val_nm.length;
+            chked_val_nm = chked_val_nmSize > 0 ? chked_val_nm.substr(0, chked_val_nmSize-1) : chked_val_nm;
+
+            $("#targetSource").val(chked_val_nm);
+            $("#submittargetSource").val(chked_val);
+            $("#trget_sourc").val("002");
+            toggle_object('vote-minfost-pop');
+        }
+
+        /* 행정동 선택한 타겟 삭제 */
+        function removeTargetDong(index,id) {
+            targetDongArray.splice(index, 1);
+            $("input:checkbox[id='"+id+"']").prop("checked", false);
+            if(id == "dongId_0"){
+                $("input:checkbox[class='dongNm']").attr("disabled", false);
+            }
+            displaySelectTargetDong();
+        }
+
+        /* 사용자 정보 생녕월일 select */
+        function fnSetEndYear(stYear,edYear){
+            fnIsOkReset();
+            var layer = "";
+            layer += '	<select class="form-control input-sm" id="ed_birth_year" name="ed_birth_year" onchange="fnIsOkReset();"> ';
+            layer += '		<option value="">~까지</option> ';
+            if(stYear != ""){
+                for(i = edYear; i >= stYear; i--){
+                    layer += '	<option value="'+i+'">'+i+'년</option> ';
+                }
+            }
+            layer += '	</select> ';
+
+            $(".addYear").html(layer);
+        }
+
+        /* 사용자 정보 서울이외 일때 히든 처리 */
+        function fnGuHedden(v){
+            fnIsOkReset();
+            if(v == "SEOUL"){
+                $(".guHedden").attr("disabled",false);
+                fnSelectGuCdAjax();
+            }else{
+                $("#addr_gu_cd").val("000");
+                $("#addr_dong_cd").val("111");
+                $(".guHedden").attr("disabled",true);
+            }
+        }
+
+        /* 엑셀 업로드 템플릿 다운로드 */
+        function fnTampletDown(){
+            document.location.href="/upload/sample/voteGroup_sample.xls";
+        }
+
+        /* 총무과 비상연락망 레이어 팝업 토글 */
+        function toggle_object(post_id) {
+            var obj = document.getElementById(post_id);
+            if (obj.style == "" || obj.style.display == "block") {
+                obj.style.display = 'none';
+            }else{
+                obj.style.display = "block";
+            }
+
+            if(post_id == "vote-recentlist-pop"){
+                fnSelectObjList();
+            }else if(post_id == "vote-minfost-pop"){
+                fnSelectGuCdAjax();
+            }else if(post_id == "vote-gps-pop"){
+                openMap('mgis_poiname','mgis_address', 'mgis_latitude', 'mgis_longitude','mgis_ctype','mgis_cdata');
+            }
+        }
+
+        //최근 목록 리스트
+        function fnVoteGroupLsit(){
+            var ss_user_id = "ADMIN";
+            var recentlist_sch_ty = $("[name=recentlist_sch_ty] option:selected").val();
+            var param = {'ss_user_id' : ss_user_id, 'recentlist_sch_ty' : recentlist_sch_ty};
+
+            jQuery.ajax( {
+                type : 'POST',
+                dataType : 'json',
+                data : param,
+                url : '/admin/voteGroup/selectVoteGroupListAjax.do',
+                success : function(param) {
+                    if(param.resultStats.resultCode == "error"){
+                        //alert(param.resultStats.resultMsg);
+                        alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                        return;
+                    }
+
+                    var list = param.resultStats.resultList;
+                    var innerHtml = "";
+                    for(var i=0; i < list.length; i++){
+                        var count = i + 1;
+                        innerHtml += '	<tr style="cursor:pointer;cursor:hand;"> ';
+                        innerHtml += '		<td><input type="checkbox" name="voteGroupNo" value="'+ list[i].SAMPLE_SEQ +'#'+ list[i].SAMPLE_NM +'"></td> ';
+                        innerHtml += '		<td>' + count + '</td> ';
+                        innerHtml += '		<td>' + list[i].SAMPLE_NM + '</td> ';
+                        innerHtml += '		<td>' + list[i].SAMPLE_CNT + '</td> ';
+                        var sampleSe = $("[name=recentlist_sch_ty] option:selected").text();
+                        innerHtml += '		<td>' + sampleSe + '</td> ';
+                        innerHtml += '		<td>';
+                        if(sampleSe == '파일 업로드') {
+                            innerHtml += '<button class="btn btn-default modi" type="button" onclick="fnVoteGroupListExcelDown('+ list[i].SAMPLE_SEQ +',\''+ list[i].SAMPLE_NM +'\'); return false;" >다운로드</button>';
+                        }
+                        innerHtml += '</td> ';
+                        innerHtml += '	</tr> ';
+                    }
+
+                    if(list.length == 0){
+                        innerHtml += '	<tr> <th colspan="6">검색된 내용이 없습니다.</th> </tr> ';
+                    }
+
+                    $(".voteGroupListArea").html(innerHtml);
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+        }
+
+        /* 엑셀다운로드 */
+        function fnVoteGroupListExcelDown(k,cntTitle){
+            if(confirm("다운로드 하시겠습니까?")){
+                $("#sample_seq").val(k);
+                $("#cntTitle").val(cntTitle);
+                $("#aform").attr({action:"/admin/voteGroup/excelDownload.do" , method:"post"}).submit();
+            }
+        }
+
+        /* 적용 버튼 클릭시 그룹 인원 카운트 */
+        function fnAddCountAjax(gubun){
+            if(gubun == "001"){
+                if($("#st_birth_year").val() == "" || $("#ed_birth_year").val() == ""){
+                    alert("적용할 시작 년도와 마지막 년도를 선택해 주세요.");
+                    return;
+                }
+            }else if(gubun == "002"){
+                if(!f_CheckAcceptFileExt('excel_upload', 'xls|xlsx|XLS|XLSX')){
+                    alert('엑셀 파일을 다시 확인해 주세요. 엑셀 파일만 가능합니다.');
+                    return;
+                }
+            }else if(gubun == "003"){
+                if($.trim($("#memListArea").val()) == ""){
+                    alert("적용할 부서 및 담당자을 선택해 주세요.");
+                    return;
+                }
+            }
+
+            $("#aform").attr("action", "/admin/voteGroup/selectVoteGroupTotCountAjax.do");
+            $("#aform").ajaxForm({
+                success : function(param) {
+                    if(param.resultStats.resultCode == "ok"){
+                        var totCnt = param.resultStats.totCnt;
+                        $("#totCnt").html(totCnt);
+                        isOk = true;
+                    }else{
+                        //alert(param.resultStats.resultMsg);
+                        alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                        return;
+                    }
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+            $("#aform").submit();
+        }
+
+        /* 총무과 레이어 팝업 검색 후 리스트 */
+        function fnMemSearchAjax(){
+            fnIsOkReset();
+            var param = $("#bform").serialize();
+            jQuery.ajax( {
+                type : 'POST',
+                dataType : 'json',
+                data : param,
+                url : '/admin/voteGroup/selectSearchAjax.do',
+                success : function(param) {
+                    if(param.resultStats.resultCode == "error"){
+                        //alert(param.resultStats.resultMsg);
+                        alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                        return;
+                    }
+
+                    var list = param.resultStats.resultList;
+                    var innerHtml = "";
+
+                    for(var i=0; i < list.length; i++){
+                        var count = i + 1;
+                        innerHtml += '	<tr style="cursor:pointer;cursor:hand;"> ';
+                        innerHtml += '		<td>' + count + '</td> ';
+                        innerHtml += '		<td>' + list[i].SMEM_NM + '</td> ';
+                        innerHtml += '		<td>' + list[i].MEM_MOBILE_NO + '</td> ';
+                        innerHtml += '		<td>' + list[i].DEPT_NM + '</td> ';
+                        innerHtml += '		<td><button class="btn btn-default" type="button" onclick="addTarget(\'D#'+list[i].DEPT+'#'+list[i].DEPT_NM+'#\'); return false;" >부서선택</button></td> ';
+                        if(list[i].SMEM_NM == "-" && list[i].MEM_MOBILE_NO == "-"){
+                            innerHtml += '		<td> - </td> ';
+                        }else{
+                            innerHtml += '		<td><button class="btn btn-default" type="button" onclick="addTarget(\'M#'+list[i].DEPT+'#'+list[i].SMEM_NM+'#'+list[i].MEM_MOBILE_NO+'\'); return false;" >개인선택</button></td> ';
+                        }
+                        innerHtml += '	</tr> ';
+                    }
+
+                    if(list.length == 0){
+                        innerHtml += '	<tr> <th colspan="5">검색된 내용이 없습니다.</th> </tr> ';
+                    }
+
+                    $(".memArea").html(innerHtml);
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+        }
+
+        /* 총무과 팝업리스트 최종 선택 */
+        function transData() {
+            fnIsOkReset();
+            var displayTxt = "";
+            var submitTxt = "";
+            $.each( targetArray, function(index , item) {
+                var array = item.split('#'); // 종류(D,M), 부서코드, 이름, 전화번호(부서시공백)
+                displayTxt += array[2] + ",";
+                submitTxt += item + "$";
+            });
+
+            //마지막 콤마 없애주는부분
+            var displaySize = displayTxt.length;
+            var submitSize = submitTxt.length;
+            displayTxt = displaySize > 0 ? displayTxt.substr(0, displaySize-1) : displayTxt;
+            submitTxt = submitSize > 0 ? submitTxt.substr(0, submitSize-1) : submitTxt;
+
+            $("#memListArea").html(displayTxt);
+            $("#select_target_str").val(submitTxt);
+
+            toggle_object("popup04");
+        }
+
+        /* 총무과 검색 후 타겟 선택 */
+        function addTarget(item) {
+            if (targetArray.indexOf(item) > -1) {
+                alert('이미 추가하였습니다.');
+            } else {
+                targetArray.push(item);
+                displaySelectTarget();
+            }
+        }
+
+        /* 총무과 선택한 타겟 삭제 */
+        function removeTarget(index) {
+            targetArray.splice(index, 1);
+            displaySelectTarget();
+        }
+
+        /* 총무과 팝업 선택명단 리스트 */
+        function displaySelectTarget() {
+            var appendHtml = "";
+            $.each( targetArray, function(index , item) {
+                var array = item.split('#'); /* 종류(D,M), 부서코드, 이름, 전화번호(부서시공백) */
+                appendHtml += "<li><a href='javascript:removeTarget(\"" + index + "\");' class='btn_delete'>삭제</a> " + array[2]
+                    + "</li>";
+            });
+
+            $(".select_list").html(appendHtml);
+        }
+
+        /* 투표 그룹 생성 */
+        function fnGoVoteGroupInsert(){
+            if($.trim($("#sample_title").val()) == ""){
+                alert("투표 그룹 제목을 입력해 주세요.");
+                return;
+            }
+
+            //적용 여부 확인
+            if(!isOk){
+                alert("적용 버튼을 눌러주세요.");
+                return;
+            }
+
+            if($("#totCnt").html() == "0"){
+                alert("조회된 투표 그룹 인원이 없습니다.");
+                return;
+            }
+
+            if(confirm("등록 하시겠습니까?")){
+                $("#aform").attr("action", "/admin/voteGroup/insertVoteGroupAjax.do");
+                $("#aform").ajaxForm({
+                    success : function(param) {
+                        if(param.resultStats.resultCode == "ok"){
+                            alert('등록 되었습니다.');
+                            //document.location.href="/admin/voteGroup/selectPageListVoteGroupMgt.do";
+                        }else{
+                            //alert(param.resultStats.resultMsg);
+                            alert("일시적인 오류가 발생 하였습니다. \n관리자에게 문의 하세요.");
+                            return;
+                        }
+                    },
+                    error : function(jqXHR, textStatus, thrownError){
+                        ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                    }
+                });
+                $("#aform").submit();
+            }
+        }
+
+        //최근 목록 선택 최종 선택
+        function fnSelectVoteGroup() {
+            if($("[name=recentlist_sch_ty] option:selected").val() == 'gps' && $("[name=voteGroupNo]:checked").length > 1) {
+                alert("gps기반은 한가지만 선택 가능합니다.");
+                return false;
+            }
+
+            var chked_val = "";
+            var chked_val_nm = "";
+            $(":checkbox[name='voteGroupNo']:checked").each(function(index,val){
+                chked_val_arry = val.value.split('#');
+                chked_val += chked_val_arry[0] + "," ;
+                chked_val_nm += chked_val_arry[1] + ",";
+            });
+
+            var chked_valSize = chked_val.length;
+            chked_val = chked_valSize > 0 ? chked_val.substr(0, chked_valSize-1) : chked_val;
+
+            var chked_val_nmSize = chked_val_nm.length;
+            chked_val_nm = chked_val_nmSize > 0 ? chked_val_nm.substr(0, chked_val_nmSize-1) : chked_val_nm;
+
+            $("#targetSource").val(chked_val_nm);
+            $("#submittargetSource").val(chked_val);
+            $("#trget_sourc").val("001");
+            $("#recentlist_ty").val($("[name=recentlist_sch_ty] option:selected").val());
+            toggle_object('vote-recentlist-pop');
+        }
+
+        ///////특정인 파일업로드//////////
+        //특정인 목록에서 파일 선택
+        function fnSeletefileTrigger() {
+            $('#submitTargetSourceExcelFile').trigger('click');
+        }
+
+        //트리거로 파일이 등록되면
+        $(function(){
+            $("#submitTargetSourceExcelFile").on("change", function(){
+                var filename = $('#submitTargetSourceExcelFile').val();
+                filename = filename.replace(/^.*[\\\/]/, '')
+                $("#targetSourceFileName").val(filename);
+                $("#excel_vldck").remove();
+                $("#targetSourceFileName").after("<input type='hidden' id='excel_vldck' value='N'/>");
+            });
+        });
+
+        //파일업로드 버튼을 누르면
+        function fnUploadTargetSource() {
+            var filename = $("#targetSourceFileName").val();
+            if(filename == ""){
+                alert("투표대상 엑셀파일을 업로드 해 주세요.");
+                return false;
+            }
+
+            $("#submitForm").ajaxForm({
+                type : 'POST',
+                enctype : "multipart/form-data",
+                dataType : "json",
+                url : '/admin/vote/checkTrgeterLimitAjax.do',
+                success : function(param) {
+                    var resultCode = param.resultStats.resultCode;
+                    var resultMsg = param.resultStats.resultMsg;
+
+                    alert(resultMsg);
+
+                    if(resultCode == "ok") {
+                        $("#targetSource").val(filename);
+                        $("#submittargetSource").val("");
+                        $("#trget_sourc").val("004");
+                        $("#excel_vldck").val("Y");
+                        $("#submitForm").ajaxFormUnbind();
+                        toggle_object('vote-excel-pop');
+                    } else {
+                        $('#submitTargetSourceExcelFile').val('');
+                        $('#targetSourceFileName').val('');
+                        $("#excel_vldck").remove();
+                    }
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError);
+                    return;
+                }
+            });
+            $("#submitForm").submit();
+        }
+        ///////특정인 파일업로드//////////
+
+    </script>
+
+
+    <!-- popup_wrap 답변 상세 입력 -->
+    <div class="popup_wrap center" id="vote-answerdetail-pop">
+        <div class="popup_box pop08">
+            <h2>답변 상세 입력</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+                <form id="aform" name="aform" method="post" action="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do" enctype="multipart/form-data" onkeydown="if(event.keyCode==13) return false;">
+                    <input type="hidden" id="select_target_str" name="select_target_str">
+                    <input type="hidden" id="cntTitle" name="cntTitle">
+                    <input type="hidden" id="sample_seq" name="sample_seq">
+                </form>
+                <ul class="img_reg_list">
+                    <!-- 대표 이미지 전용 -->
+                    <li class="top add">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="preventDefault">
+                            <span class="txt">대표 이미지</span>
+                        </a>
+                        <button type="button" class="del_btn" style="display:none"></button>
+                    </li>
+                    <!-- 이미지 추가 전용 -->
+                    <li class="add">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="preventDefault">
+                            <span class="txt">이미지 추가</span>
+                        </a>
+                        <button type="button" class="del_btn" style="display:none"></button>
+                    </li>
+                    <!-- 이미지 추가 전용 -->
+                    <li class="add">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="preventDefault">
+                            <span class="txt">이미지 추가</span>
+                        </a>
+                        <button type="button" class="del_btn" style="display:none"></button>
+                    </li>
+                    <!-- 이미지 추가 전용 -->
+                    <li class="add">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="preventDefault">
+                            <span class="txt">이미지 추가</span>
+                        </a>
+                        <button type="button" class="del_btn" style="display:none"></button>
+                    </li>
+                    <!-- 이미지 추가 전용 -->
+                    <li class="add">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="preventDefault">
+                            <span class="txt">이미지 추가</span>
+                        </a>
+                        <button type="button" class="del_btn" style="display:none"></button>
+                    </li>
+                    <!-- 이미지 추가 전용 -->
+                    <li class="add">
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="preventDefault">
+                            <span class="txt">이미지 추가</span>
+                        </a>
+                        <button type="button" class="del_btn" style="display:none"></button>
+                    </li>
+                </ul>
+
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col style="width: 150px;">
+                        <col style="width: auto;">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th scope="row">URL 여부</th>
+                        <td>
+                            <ul class="v_list" style="text-align: left;">
+                                <li>
+                                    <input type="radio" name="ge_popup_url_at" id="ge_popup_url_at_01" value="Y" onchange="toggleURLCheckbox()">
+                                    <label for="ge_popup_url_at_01">예</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="ge_popup_url_at" id="ge_popup_url_at_02" value="N" checked="checked" onchange="toggleURLCheckbox()">
+                                    <label for="ge_popup_url_at_02">아니오</label>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">답변 상세 제목</th>
+                        <td>
+                            <input type="text" class="form-control" id="ge_popup_sj" onkeyup="cfLengthCheck2(&#39;답변 상세 제목은&#39;, this, 1000, 1000);" placeholder="답변 상세 제목을 입력해 주세요. (최대 1000자)">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">답변 상세 내용</th>
+                        <td>
+                            <textarea class="form-control" rows="6" id="ge_popup_cn" onkeyup="cfLengthCheck2(&#39;답변 상세 내용은&#39;, this, 1100, 1000);" placeholder="답변 상세 내용을 입력해 주세요.(최대 1000자)"></textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="b_center">
+                    <button id="insertAnswerDetailBtn" class="btn btn-primary" type="button"> <i class="fa fa-pencil"></i> 입력</button>
+                    <!-- <button id="updateTagBtn" class="btn btn-warning" type="button"> <i class="fa fa-wrench"></i> 수정</button> -->
+                </div>
+            </div>
+            <a id="vote-answerdetail-pop_close" class="popup_close" onclick="toggle_object(&#39;vote-answerdetail-pop&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">
+                <span>닫기</span>
+            </a>
+            <!-- end:popup_contents -->
+        </div>
+    </div>
+    <!-- // popup_wrap 답변 상세 입력 -->
+    <!-- popup_wrap 특정인 설정 - 최근목록 불러오기 -->
+    <div class="popup_wrap center" id="vote-recentlist-pop">
+        <div class="popup_box pop08 w1100">
+            <h2>특정인 설정</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+                <h3 class="popup_sub_tit">최근목록 불러오기</h3>
+                <select class="form-control" name="recentlist_sch_ty" onchange="fnVoteGroupLsit();">
+                    <option value="fileUpload">파일 업로드</option>
+                    <option value="userInfo">회원정보기반</option>
+                    <option value="gps">GPS기반</option>
+                </select>
+                <!-- tbl_scroll_box -->
+                <div class="tbl_scroll_box">
+                    <table class="table txt_center scroll">
+                        <colgroup>
+                            <col style="width: 50px;">
+                            <col style="width: 8%;">
+                            <col style="width: auto;">
+                            <col style="width: 13%;">
+                            <col style="width: 13%;">
+                            <col style="width: 150px;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>선택</th>
+                            <th>No</th>
+                            <th>대상정보</th>
+                            <th>대상인원</th>
+                            <th>구분</th>
+                            <th>비고</th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="voteGroupListArea">
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- // tbl_scroll_box -->
+
+                <div class="b_center">
+                    <button class="btn btn-primary" type="button" onclick="fnSelectVoteGroup();"><i class="fa fa-check"></i> 선택</button>
+                </div>
+            </div>
+            <a class="popup_close" onclick="toggle_object(&#39;vote-recentlist-pop&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">
+                <span>닫기</span>
+            </a>
+            <!-- end:popup_contents -->
+        </div>
+    </div>
+    <!-- // popup_wrap 특정인 설정 - 최근목록 불러오기 -->
+
+    <!-- popup_wrap 특정인 설정 - 연락처 엑셀파일 -->
+    <div class="popup_wrap center" id="vote-excel-pop">
+        <div class="popup_box pop08 w550">
+            <h2>특정인 설정</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+                <h3 class="popup_sub_tit mb1">
+                    연락처 엑셀파일
+                    <button type="button" class="btn bg-olive" onclick="fnTampletDown();"><i class="fa fa-file-excel-o"></i> 양식받기</button>
+                </h3>
+                <p class="bg_text_gray">* 주의 : “xls 파일로 업로드해 주세요. xlsx는 업로드 할 수 없습니다.</p>
+                <button class="btn btn-default" onclick="fnSeletefileTrigger(); return false;"> 파일선택</button>
+                <input type="text" id="targetSourceFileName" name="targetSourceFileName" class="form-control" readonly="readonly">
+                <!-- excel_pop_con_box -->
+                <div class="excel_pop_con_box">
+                    <p class="txt1">※ 특정인(휴대폰번호 파일 업로드) 투표 설정 시 투표 대상에게 SMS 발송 지원을 받으실 수 있습니다.</p>
+                    <p class="txt2">☎ 문의 : 신오균 주무관(<b>02-2133-2953</b>)</p>
+                    <h4 class="tit1">문자발송 예시</h4>
+                    <img src="./common/mobile_ex.jpg" alt="">
+                </div>
+                <!-- // excel_pop_con_box -->
+
+                <div class="b_center">
+                    <button class="btn btn-primary" type="button" onclick="fnUploadTargetSource();"><i class="fa fa-download"></i> 파일업로드</button>
+                </div>
+            </div>
+            <a class="popup_close" onclick="toggle_object(&#39;vote-excel-pop&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">
+                <span>닫기</span>
+            </a>
+            <!-- end:popup_contents -->
+        </div>
+    </div>
+    <!-- // popup_wrap 특정인 설정 - 연락처 엑셀파일 -->
+
+    <!-- popup_wrap 특정인 설정 - 회원정보 기반 -->
+    <div class="popup_wrap center" id="vote-minfost-pop">
+        <div class="popup_box pop08 w1100">
+            <h2>특정인 설정</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+                <h3 class="popup_sub_tit">회원정보 기반</h3>
+                <p>엠보팅 회원이 설정한 지역정보를 기반으로 특정인 투표를 진행 할 수 있습니다. (해당 정보는 정확하지 않을 수 있습니다.)</p>
+
+                <!-- minfo_area_box -->
+                <div class="minfo_area_box">
+                    <div class="each">
+                        <span class="tit">지역구</span>
+                        <ul class="list localGuListArea">
+                        </ul>
+                    </div>
+                    <div class="each">
+                        <span class="tit">행정동</span>
+                        <ul class="list localDongListArea">
+                        </ul>
+                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" class="btn_choice_new" onclick="fnSelectAddrCode(); return false;">선택</a>
+                    </div>
+                    <div class="each">
+                        <span class="tit">선택지역</span>
+                        <ul class="list selectLocalArea">
+                        </ul>
+                    </div>
+                </div>
+                <!-- // minfo_area_box -->
+
+                <p class="minfo_area_cnt_txt">선택한 특정인 수 : <b class="dongTotCntArea">0 명</b></p>
+
+                <div class="b_center">
+                    <button class="btn btn-primary" type="button" onclick="fnSelectAddrCodeEnd();"><i class="fa fa-check"></i> 선택</button>
+                </div>
+            </div>
+            <a class="popup_close" onclick="toggle_object(&#39;vote-minfost-pop&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">
+                <span>닫기</span>
+            </a>
+            <!-- end:popup_contents -->
+        </div>
+    </div>
+    <!-- // popup_wrap 특정인 설정 - 회원정보 기반 -->
+
+    <!-- popup_wrap 특정인 설정 - GPS 기반 -->
+    <div class="popup_wrap center" id="vote-gps-pop">
+        <div class="popup_box pop08 w1100">
+            <h2>특정인 설정</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+                <h3 class="popup_sub_tit">GPS 기반</h3>
+                <p>특정한 위치(중심좌표)를 기준으로 일정 반경 이내에서 내주변투표를 실행하는 사용자에게만 투표를 진행할 수 있습니다.</p>
+                <div class="">
+                    <!-- //지도영역 -->
+                    <iframe id="iframe" src="./common/saved_resource.html" width="100%" height="422px"></iframe>
+                </div>
+
+                <div class="b_center">
+                    <button class="btn btn-primary" type="button"><i class="fa fa-check"></i> 선택</button>
+                </div>
+            </div>
+            <a class="popup_close" onclick="toggle_object(&#39;vote-gps-pop&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">
+                <span>닫기</span>
+            </a>
+            <!-- end:popup_contents -->
+        </div>
+    </div>
+    <!-- // popup_wrap 특정인 설정 - GPS 기반 -->
+
+
+
+
+    <script type="text/javascript">
+        /* 부서정보 조회 */
+        function fnSelectSearchDeptList(dept_code){
+            var req ={
+                "sch_dept" : $("#sch_dept").val()
+            };
+
+            jQuery.ajax( {
+                type : 'POST',
+                dataType : 'json',
+                url : '/admin/vote/selectSearchDeptListAjax.do',
+                data : req,
+                success : function(param) {
+                    if(param.resultStats.resultCode == "error"){
+                        alert(param.resultStats.resultMsg);
+                        return;
+                    }
+                    var list = param.resultStats.resultList;
+                    var innerHtml = "";
+                    for(var i=0; i < list.length; i++){
+                        var dept_code = list[i].DEPT_CODE;
+                        var depth_nm = list[i].DEPT_NM;
+                        var lowest_nm = list[i].LOWEST_NM;
+                        var best_code = list[i].BEST_CODE;
+                        var best_nm = list[i].BEST_NM;
+
+                        var cnt = i + 1;
+                        innerHtml += '	 <tr  style="cursor:pointer;cursor:hand;" onclick="fnConfirmText(\''+depth_nm+'\',\''+dept_code+'\',\''+best_code+'\')">';
+                        innerHtml += '		<td>'+cnt+'</td>';
+                        innerHtml += '		<td>'+dept_code+'</td>';
+                        innerHtml += '		<td style="text-align:left">'+depth_nm+'</td>';
+                        innerHtml += '		<td>'+lowest_nm+'</td>';
+                        innerHtml += '		<td>'+best_nm+'</td>';
+                        innerHtml += '	 </li>';
+                    }
+                    if(i==0)
+                    {
+                        innerHtml += '	 <tr>';
+                        innerHtml += '	 <th colspan="5">검색된 내용이 없습니다.</th>';
+                        innerHtml += '	 </tr>  ';
+                    }
+                    $("#searchDeptListArea").html(innerHtml);
+                },
+                error : function(jqXHR, textStatus, thrownError){
+                    ajaxJsonErrorAlert(jqXHR, textStatus, thrownError)
+                }
+            });
+        }
+        function fnConfirmText(depth_nm,dept_code,best_code){
+            if(confirm('선택하신 부서 정보는 \n------------------------------------------\n부서명 : '+depth_nm+' \n부서 코드 : '+dept_code+' \n------------------------------------------\n입니다. '))
+            {
+                //alert(depth_nm+"-"+dept_code+"-"+best_code);
+                $("#dept_code").val(dept_code);
+                $("#best_code").val(best_code);
+                $("#viewDeptNm").text(depth_nm);
+                toggle_object('popup05');
+            }
+            else{
+                $("#dept_code").val("none");
+                $("#best_code").val("none");
+                $("#viewDeptNm").text("");
+            }
+        }
+
+
+    </script>
+    <!-- start:부서정보 찾기 버튼 팝업 -->
+    <div class="popup_wrap" id="popup05">
+        <div class="popup_box pop07">
+            <h2>부서정보 선택</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+                <p class="bg_text_gray">
+                    부서를 검색하여 부서를 선택하여 주세요<br>
+                    투표 발제시 선택하신 부서로 회원 정보가 자동 업데이트 됩니다.
+                </p>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <input type="text" value="" name="sch_dept" id="sch_dept" class="form-control" onkeydown="javascript:if(event.keyCode == &#39;13&#39;) fnSelectSearchDeptList();">
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <button type="button" onclick="fnSelectSearchDeptList(); return false;" class="btn btn btn-primary btn_30 targetSourceBtn">부서찾기</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <br>
+                        <div class="">
+                            <div class="box-body no-pad-top" style="padding:0; height:400px; overflow-y:scroll; ">
+                                <table class="table table-hover txt_center">
+                                    <colgroup>
+                                        <col width="8%">
+                                        <col width="10%">
+                                        <col width="*">
+                                        <col width="22%">
+                                        <col width="15%">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>부서코드</th>
+                                        <th>전체 부서명</th>
+                                        <th>부서명</th>
+                                        <th>최상위부서명</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="memArea" id="searchDeptListArea">
+                                    <tr>
+                                        <th colspan="5">검색된 내용이 없습니다.</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <a class="popup_close" onclick="toggle_object(&#39;popup05&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#"><span>닫기</span></a>
+
+        </div>
+    </div>
+
+
+    <link rel="stylesheet" href="./common/css/cropper/cropper.css">
+    <script type="text/javascript" src="./common/js/cropper/cropper.js"></script>
+    <script type="text/javascript" src="./common/js/cropper/jquery-cropper.js"></script>
+
+
+
+    <script type="text/javascript">
+        $(function() {
+
+            var orgnImgFileId = "";					// 원본이미지 id 변수(썸네일 이미지가 1개 밖에 없기 때문에 전역으로 만듬)
+
+            $('.imageTagPopBtn').on('click', function () {
+
+                if($("#vote_ty").val() == 'V') {
+                    fnSelectVoteTag("vs");
+                } else if($("#vote_ty").val() != '' && $("#vote_ty").val() != undefined && ($("#thumb_doc_id").val() == ""|| $("#thumb_doc_id").val() == undefined )) {
+                    fnSelectVoteTag("ge");
+                } else {
+                    if($(this).data("vote-no") != ''&& $(this).data("vote-no") != undefined){
+                        fnSelectVoteTagAjax($(this).data("vote-no"), $(this).data("vote-ty"));
+                    } else{
+                        fnSelectVoteTagAjax($("#vote_no").val(), $("#vote_ty").val());
+                    }
+
+                    return false;
+                }
+            });
+
+            // 동적으로 생성되는 버튼에 이벤트 바인딩
+            $(document).on("click", "#updateTagBtn" , function () {
+                var file_id = new Array();
+                var image_dc = new Array();
+
+                var check = true;
+
+                //밸리데이션 체크
+                $(".image_dc").each(function() {
+                    if($(this).val().length >= 2000) {
+                        alert("2000자 미만으로 입력해 주세요.");
+                        check = false;
+                        return false;
+                    }
+
+                    file_id.push($(this).closest(".rimg_tag_box").data("file-id"));
+                    image_dc.push($(this).val());
+                });
+
+                if(orgnImgFileId != "") {						// 대표이미지가 있을 때
+                    file_id.push(orgnImgFileId);				// 원본이미지의 id도 추가
+                    image_dc.push(image_dc[0]);					// 디스크립션도 동일하게 추가
+                }
+
+
+
+                if(check == true && confirm("등록하시겠습니까?")) {		//.each()에서는 return false가 단순 반복 탈출이므로 변수로 체크
+                    var param = { 'file_id' : file_id
+                        , 'image_dc' : image_dc};
+
+                    $.ajax({
+                        url : '/admin/vote/insertVoteImageTagAjax.do',
+                        type : 'post',
+                        dataType : 'json',
+                        data : param,
+                        async : false,
+                        success : function(response){
+                            if(response.resultStats.resultCode == 'ok'){
+                                alert("등록되었습니다.");
+                            } else {
+                                ajaxErrorMsg(response);
+                            }
+                        },
+                        error : function(jqXHR, textStatus, thrownError){
+                            ajaxJsonErrorAlert(jqXHR, textStatus, thrownError);
+                        }
+                    });
+                }
+
+                var boxSize = $(".rimg_tag_box").length;
+                var innerhtml = "";
+
+                if(($("[name= main_image_dc]").val() != '' || $("[name= main_image_dc]").val() != undefined) && boxSize > $("[name= main_image_dc]").length) {
+                    for(var i = 0; i < boxSize; i++) {
+                        innerhtml += "<input type=\"hidden\" name=\"main_image_dc\" value=\"" + $(".image_dc").eq(i).val() +"\">";
+                    }
+                    $("#submitForm").prepend(innerhtml);
+                } else {
+                    $("[name= main_image_dc]").each(function(index, item){
+                        $(item).val($(".image_dc").eq(index).val());
+                    });
+                }
+
+                toggle_object('vote-imgtag-pop');
+
+                return false;
+            });
+
+            $(document).on("click", "#insertTagBtn" , function () {
+                var boxSize = $(".rimg_tag_box").length;
+                var innerhtml = "";
+
+                if(($("[name= main_image_dc]").val() != '' || $("[name= main_image_dc]").val() != undefined) && boxSize > $("[name= main_image_dc]").length) {
+                    for(var i = 0; i < boxSize; i++) {
+                        innerhtml += "<input type=\"hidden\" name=\"main_image_dc\" value=\"" + $(".image_dc").eq(i).val() +"\">";
+                    }
+                    $("#submitForm").prepend(innerhtml);
+                } else {
+                    $("[name= main_image_dc]").each(function(index, item){
+                        $(item).val($(".image_dc").eq(index).val());
+                    });
+                }
+
+                toggle_object('vote-imgtag-pop');
+            });
+
+            // 투표 만들기 화면에서 사용
+            function fnSelectVoteTag(vote_ty){
+                var imgNum = vote_ty == 'ge' ? 1 : $("[name*='" + vote_ty + "_attImgFileInfo']").length;
+
+                if(imgNum == 0) {
+                    alert("투표의 대표 이미지를 등록해주세요.");
+                    return false;
+                }
+
+                for(var i = 1; i<=imgNum; i++) {
+                    if($("#" + vote_ty + "_attImgFileInfo_"+ i).val() == '' || $("#" + vote_ty + "_attImgFileInfo_"+ i).val() == undefined) {
+                        alert("투표의 대표 이미지를 등록해주세요.");
+                        return false;
+                    }
+                }
+
+                var htmlstr = '';
+
+                htmlstr = '';
+                for(var i = 1; i <= imgNum; i++) {
+                    var image_dc = $("[name=main_image_dc]").eq(i-1).val() != undefined ? $("[name=main_image_dc]").eq(i-1).val() : '';
+
+                    htmlstr += "<div class=\"rimg_tag_box\" data-file-id=\"\">"
+                    if(vote_ty == 'vs') {
+                        htmlstr += "<a href=\"#\" class=\"left\ \"preventDefault\"><img src=\"" + $("#" + vote_ty + "ImgfileBtn_"+ i).attr("src") + "\" alt=\"\"></a>"
+                    }else {
+                        htmlstr += "<a href=\"#\" class=\"left\ \"preventDefault\"><img src=\"" + $("#" + vote_ty + "ImgfileBtn_"+ i).find("img").attr("src") + "\" alt=\"\"></a>"
+                    }
+                    htmlstr += "<div class=\"right\"><textarea cols=\"30\" rows=\"4\" class=\"form-control image_dc\" maxlength=\"2000\">"+ image_dc +"</textarea></div>"
+                    htmlstr += "</div>"
+
+                }
+
+                htmlstr += "<div class=\"b_center\">"
+                htmlstr += "<button id=\"insertTagBtn\" class=\"btn btn-primary\" type=\"button\"> <i class=\"fa fa-pencil\"></i> 입력</button>"
+                htmlstr += "<!--<button class=\"btn btn-warning\" type=\"button\"> <i class=\"fa fa-wrench\"></i> 수정</button> -->"
+                htmlstr += "</div>"
+
+
+                $("#vote-imgtag-pop .popup_contents").html('');
+                $("#vote-imgtag-pop .popup_contents").append(htmlstr);
+
+                toggle_object('vote-imgtag-pop');
+            }
+
+
+            // 투표 이미지 태그 팝업 열기 (투표목록에서 사용)
+            // 추후에 대표이미지 이외에도 alt 태그 추가할 가능성이 있으므로 아래와 같이 처리
+            function fnSelectVoteTagAjax(vote_no, vote_ty){
+                var param = { 'vote_no' : vote_no, 'vote_ty' : vote_ty };
+
+                $.ajax({
+                    url : '/admin/vote/selectVoteImageInfoAjax.do',
+                    type : 'post',
+                    dataType : 'json',
+                    data : param,
+                    async : false,
+                    success : function(response){
+                        if(response.resultStats.resultCode == 'ok'){
+                            var resultList = response.resultStats.resultList;
+                            var htmlstr = '';
+
+                            $("#vote-imgtag-pop .popup_contents").html('');
+                            for(var i = 0; i < resultList.length; i++) {
+                                var imageInfoMap = resultList[i];
+
+                                // vs 투표가 아닐 때
+                                if(imageInfoMap.VOTE_TY != 'V') {
+                                    //썸네일과 대표이미지가 모두 없으면 리턴
+                                    if(imageInfoMap.IMG_FILE_ID_THUMB == null && imageInfoMap.ORGN_IMG_FILE_ID_THUMB == null) {
+                                        alert("대표이미지가 설정되어 있지 않습니다.")
+                                        return false;
+                                    }
+
+                                    // 대표이미지가 있을 때(vs투표를 제외하고는 썸네일과 원본이미지의 alt를 모두 업데이트)
+                                    if(imageInfoMap.ORGN_IMG_FILE_ID_THUMB != null) {
+                                        orgnImgFileId = imageInfoMap.ORGN_IMG_FILE_ID_THUMB;
+                                    } else {
+                                        orgnImgFileId = "";
+                                    }
+                                } else {
+                                    orgnImgFileId = "";
+                                }
+
+                                htmlstr = '';
+                                htmlstr += "<div class=\"rimg_tag_box\" data-file-id=\"\">"
+                                htmlstr += "<a href=\"#\" class=\"left\" onclick=\"return false;\"><img src=\"/common/images/img_none04.png\" alt=\"\"></a>"
+                                htmlstr += "<div class=\"right\"><textarea cols=\"30\" rows=\"4\" class=\"form-control image_dc\" maxlength=\"2000\"></textarea></div>"
+                                htmlstr += "</div>"
+
+                                $("#vote-imgtag-pop .popup_contents").append(htmlstr);
+
+                                $(".rimg_tag_box").eq(i).data("file-id", imageInfoMap.IMG_FILE_ID_THUMB);
+
+
+                                // 썸네일이 없으면 대표이미지 출력
+                                if(imageInfoMap.IMG_FILE_ID_THUMB != null) {
+                                    $(".rimg_tag_box img").eq(i).attr("src", "/common/file/viewFile.do?file_id="+ imageInfoMap.IMG_FILE_ID_THUMB);
+                                    $(".image_dc").eq(i).val(imageInfoMap.IMG_TAG_DC_THUMB);
+                                } else if(imageInfoMap.ORGN_IMG_FILE_ID_THUMB != null) {
+                                    $(".rimg_tag_box img").eq(i).attr("src", "/common/file/viewFile.do?file_id="+ imageInfoMap.ORGN_IMG_FILE_ID_THUMB);
+                                    $(".image_dc").eq(i).val(imageInfoMap.ORGN_IMG_TAG_DC_THUMB);
+                                } else {
+                                    // vs 투표 같은 경우 한쪽 답변에만 대표이미지가 있으면 없는 쪽 답변은 이미지 태그 등록을 막아야함
+                                    $(".image_dc").eq(i).val(imageInfoMap.ANSWER).prop("disabled", true);	// 답변 제목으로 태그 내용 고정
+                                }
+                            }
+
+                            htmlstr = "<div class=\"b_center\">"
+                            htmlstr += "<!-- <button id=\"insertTagBtn\" class=\"btn btn-primary\" type=\"button\"> <i class=\"fa fa-pencil\"></i> 입력</button> -->"
+                            htmlstr += "<button id=\"updateTagBtn\" class=\"btn btn-warning\" type=\"button\"> <i class=\"fa fa-wrench\"></i> 수정</button>"
+                            htmlstr += "</div>"
+
+                            $("#vote-imgtag-pop .popup_contents").append(htmlstr);
+
+                            toggle_object('vote-imgtag-pop');
+
+                        } else {
+                            ajaxErrorMsg(response);
+                        }
+                    },
+                    error : function(jqXHR, textStatus, thrownError){
+                        ajaxJsonErrorAlert(jqXHR, textStatus, thrownError);
+                    }
+                });
+
+
+
+
+            }
+        });
+
+    </script>
+
+    <!--  start:대표이미지 태그입력 팝업 -->
+    <div class="popup_wrap" id="vote-imgtag-pop">
+        <div class="popup_box pop08">
+            <h2>대표이미지 태그입력</h2>
+            <!-- start:popup_contents -->
+            <div class="popup_contents">
+
+            </div>
+            <a class="popup_close" onclick="toggle_object(&#39;vote-imgtag-pop&#39;); return false;" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">
+                <span>닫기</span>
+            </a>
+            <!-- end:popup_contents -->
+        </div>
+    </div>
+    <!--  end:대표이미지 태그입력 팝업 -->
+    <!-- //레이어팝업 -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="min-height: 598px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>투표 만들기</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- 사용자 정보 -->
+                <div class="col-xs-12">
+                    <form id="submitForm" name="submitForm" action="https://cmsmvoting.seoul.go.kr/admin/vote/insertVoteAjax.do" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="qestn_co" name="qestn_co" value="1">
+                        <input type="hidden" id="totAnsCnt" name="totAnsCnt">
+                        <input type="hidden" id="vote_sttus" name="vote_sttus">
+                        <input type="hidden" id="vote_ty" name="vote_ty" value="M">
+                        <input type="hidden" id="targetSourceTabNo" name="targetSourceTabNo">
+                        <input type="hidden" id="trget_sourc" name="trget_sourc">
+                        <input type="hidden" id="recentlist_ty" name="recentlist_ty">
+
+                        <input type="hidden" name="event_seq" id="event_seq" value="none">
+
+
+
+                        <!-- new_vote_reg_wrap -->
+                        <div class="new_vote_reg_wrap">
+                            <!-- box -->
+                            <div class="box box-primary">
+                                <!-- box-header -->
+                                <div class="box-header s_header">
+                                    <div class="nvote_type_slt">
+                                        <h2 class="tit">투표 카테고리 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표 유형을 설정 할 수 있습니다.<br>정책투표 : 가장 일반적인 투표로 객관식,주관식 또는 복합투표가 가능합니다.<br>VS 형 : 간단한 예/아니오 형식의 투표로 사용자가 간편하게 투표할 수 있습니다.<br>다중투표 : 성격이 다른 정책투표 2개를 묶은 특수투표입니다. 이용시 문의바랍니다.<br>분기투표 : 설문조사 형식으로 사용되며 사용자가 선택한 답변에 따라 다음 질문이 변경됩니다.
+                                        </div></i></h2>
+                                        <div class="radio_box">
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" id="vote01" name="voteType" value="N" onclick="fnSelVoteType(&#39;01&#39;);" checked="checked">
+                                                    <label for="vote01">정책투표</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" id="vote02" name="voteType" value="V" onclick="fnSelVoteType(&#39;02&#39;);">
+                                                    <label for="vote02">VS형</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" id="vote03" name="voteType" value="J">
+                                                    <label for="vote03">다중투표</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" id="vote04" name="voteType" value="D">
+                                                    <label for="vote04">분기투표</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // box-header -->
+
+                                <!-- 정책투표 선택시 출력 -->
+                                <!-- box-header -->
+                                <div class="box-header s_header">
+                                    <div class="nvote_type_slt">
+                                        <h2 class="tit">정책투표 카테고리 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            만드는 투표가 정책적으로 반영예정인지 참고사항인지를 선택합니다.<br>정책반영투표 : 투표의 결과가 실제 정책에 반영되는 경우에 설정하는 투표로 결과 노출, 투표대상, 통계정보 등 일부 설정값이 고정됩니다.<br>정책참고투표 : 투표의 결과가 실제 정책과 관계없이 참고용인 투표입니다.<br>
+                                        </div></i></h2>
+                                        <div class="radio_box">
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="policy_vote_ty" id="policy_vote_ty_01" value="001">
+                                                    <label for="policy_vote_ty_01">정책반영투표</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="policy_vote_ty" id="policy_vote_ty_02" value="002" checked="checked">
+                                                    <label for="policy_vote_ty_02">정책참고투표</label>
+                                                </li>
+                                            </ul>
+
+                                            <div class="inten_input_box lbl_slt_set">
+                                                <input type="checkbox" id="minmm_vote_quorum_cnt" disabled="disabled"> <label for="minmm_vote_quorum_cnt">의사정족수 <i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+                                                의사 정족수 설정 시 투표 화면에 의사정족수에 관한 문구가 표출됩니다.<br>기본 : ※ 본 투표의 최소 의사 정족수는 ##명 입니다.<br>투표 마감 후 도달 시 : 최소 의사정족수 ##명 이상이 참여 한 투표입니다.<br>투표 마감 후 미 도달 시 : 최소 의사정족수 ##명이 비 충족된 투표입니다
+                                            </div></i></label>
+                                                <input type="text" id="minmm_vote_qurrum_co" name="minmm_vote_qurrum_co" class="tinput form-control" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // box-header -->
+                            </div>
+                            <!-- // box -->
+
+                            <h2 class="nvote_img_top_tit">투표 이미지 등록 <i class="fa fa-exclamation-circle btn_help" style="color:#fff"><div class="help_box">
+                                투표의 대표 이미지를 등록합니다.<br>투표의 대표이미지 및 추가 이미지를 등록가능하며 용량제한은 이미지 1개당 2MB 입니다.<br>이미지는 JPG,JPEG,PNG 포맷을 지원하며 정사각형 또는 4X3 비율의 가로형의 직사각형 이미지를 추천드립니다.
+                            </div></i></h2>
+                            <!-- box -->
+                            <div class="box box-primary img_reg">
+                                <ul class="img_reg_list vote_type01">
+                                    <!-- 대표 이미지 전용 -->
+                                    <li class="top add">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" id="geImgfileBtn_1" onclick="fnSeleteGeImgTrigger(1); return false;">
+                                            <span class="txt">대표 이미지</span>
+                                        </a>
+                                        <input type="hidden" class="form-control" id="ge_attImgFileInfo_1" name="ge_attImgFileInfoMain" value="">
+                                        <button type="button" class="del_btn" id="geImgDelete_1" onclick="fnGeImgDelete(1); return false;" style="display:none"></button>
+                                    </li>
+                                    <!-- 이미지 추가 전용 -->
+                                    <li class="add">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" id="geImgfileBtn_2" class="" onclick="fnSeleteGeImgTrigger(2); return false;">
+                                            <span class="txt">이미지 추가</span>
+                                        </a>
+                                        <input type="hidden" class="form-control" id="ge_attImgFileInfo_2" name="ge_attImgFileInfoMain" value="">
+                                        <button type="button" class="del_btn" id="geImgDelete_2" onclick="fnGeImgDelete(2); return false;" style="display:none"></button>
+                                    </li>
+                                    <!-- 이미지 추가 전용 -->
+                                    <li class="add">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" id="geImgfileBtn_3" class="" onclick="fnSeleteGeImgTrigger(3); return false;">
+                                            <span class="txt">이미지 추가</span>
+                                        </a>
+                                        <input type="hidden" class="form-control" id="ge_attImgFileInfo_3" name="ge_attImgFileInfoMain" value="">
+                                        <button type="button" class="del_btn" id="geImgDelete_3" onclick="fnGeImgDelete(3); return false;" style="display:none"></button>
+                                    </li>
+                                    <!-- 이미지 추가 전용 -->
+                                    <li class="add">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" id="geImgfileBtn_4" class="" onclick="fnSeleteGeImgTrigger(4); return false;">
+                                            <span class="txt">이미지 추가</span>
+                                        </a>
+                                        <input type="hidden" class="form-control" id="ge_attImgFileInfo_4" name="ge_attImgFileInfoMain" value="">
+                                        <button type="button" class="del_btn" id="geImgDelete_4" onclick="fnGeImgDelete(4); return false;" style="display:none"></button>
+                                    </li>
+                                    <!-- 이미지 추가 전용 -->
+                                    <li class="add">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" id="geImgfileBtn_5" onclick="fnSeleteGeImgTrigger(5); return false;">
+                                            <span class="txt">이미지 추가</span>
+                                        </a>
+                                        <input type="hidden" class="form-control" id="ge_attImgFileInfo_5" name="ge_attImgFileInfoMain" value="">
+                                        <button type="button" class="del_btn" id="geImgDelete_5" onclick="fnGeImgDelete(5); return false;" style="display:none"></button>
+                                    </li>
+                                    <!-- 이미지 추가 전용 -->
+                                    <li class="add">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" id="geImgfileBtn_6" onclick="fnSeleteGeImgTrigger(6); return false;">
+                                            <span class="txt">이미지 추가</span>
+                                        </a>
+                                        <input type="hidden" class="form-control" id="ge_attImgFileInfo_6" name="ge_attImgFileInfoMain" value="">
+                                        <button type="button" class="del_btn" id="geImgDelete_6" onclick="fnGeImgDelete(6); return false;" style="display:none"></button>
+                                    </li>
+                                </ul>
+                                <!-- VS투표 의 경우 -->
+                                <div class="vote_vs_vox vote_type02" style="display:none;">
+                                    <div class="vs_box">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" onclick="return false;">
+                                            <span id="vsImgDelete_1" class="" onclick="fnVsimgDelete(1); return false;"></span>
+                                            <img src="./common/img_none04.png" alt="답변 이미지" id="vsImgfileBtn_1">
+                                        </a>
+                                        <input type="text" class="form-control" id="vs_vote_ans_1" name="vs_vote_ans_1" value="" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+                                        <input type="hidden" class="form-control" id="vs_attImgFileInfo_1" name="vs_attImgFileInfo_1" value="" style="width:302px; height:216px;">
+                                    </div>
+                                    <span class="text_vs">VS</span>
+                                    <div class="vs_box">
+                                        <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" onclick="return false;">
+                                            <span id="vsImgDelete_2" class="" onclick="fnVsimgDelete(2); return false;"></span>
+                                            <img src="./common/img_none04.png" alt="답변 이미지" id="vsImgfileBtn_2">
+                                        </a>
+                                        <input type="text" class="form-control" id="vs_vote_ans_2" name="vs_vote_ans_2" value="" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+                                        <input type="hidden" class="form-control" id="vs_attImgFileInfo_2" name="vs_attImgFileInfo_2" value="" style="width:302px; height:216px;">
+                                    </div>
+                                </div>
+                                <div class="b_center btnBox">
+                                    <button class="btn btn-gray imageTagPopBtn" type="button"><i class="fa fa-file-image-o"></i> 이미지 태그입력</button>
+                                    <button class="btn btn-success vote_type01 geThumbBtn" type="button"><i class="fa fa-edit fz15"></i> 대표이미지 편집</button>
+                                    <input type="hidden" class="form-control" id="geThumbfileInfo" name="geThumbfileInfo" value="">
+                                </div>
+                            </div>
+                            <!-- // box -->
+                            <!-- box -->
+                            <div class="box box-primary">
+                                <h2 class="nvote_sub_tit">투표 제목 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                    투표의 제목을 입력합니다. 글자수 제한은 없지만 리스트에 표출되는 영역의 한계가 있기 때문에 20자 이내를 추천합니다.
+                                </div></i></h2>
+                                <input type="text" id="ge_vote_sj" name="ge_vote_sj" class="form-control vote_type01" placeholder="투표 제목을 입력해 주세요. (최대 100자)" onkeyup="cfLengthCheck2(&#39;투표 제목은&#39;, this, 110, 100);">
+                                <input type="text" id="vs_vote_sj" name="vs_vote_sj" class="form-control vote_type02" placeholder="투표 제목을 입력해 주세요. (최대 100자)" onkeyup="cfLengthCheck2(&#39;투표 제목은&#39;, this, 110, 100);" style="display:none;">
+                            </div>
+                            <!-- // box -->
+                            <!-- box -->
+                            <div class="box box-primary vote_type01 vote-color">
+                                <table class="table table-bordered th_relative">
+                                    <colgroup>
+                                        <col style="width: 150px;">
+                                        <col style="width: auto;">
+                                        <col style="width: 150px;">
+                                        <col style="width: auto;">
+                                        <col style="width: 150px;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">투표 표시 유형 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표의 질문영역의 표현 스타일을 정합니다.<br>일반 : 질문이 세로로 모두 표출됩니다.<br>블록 : 모든 질문이 상단에 블록형식으로 표현되며 선택된 질문만 리스트로 표출됩니다.
+                                        </div></i></th>
+                                        <td>
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="vote_indict_ty" id="vote_indict_ty_01" value="001" checked="checked">
+                                                    <label for="vote_indict_ty_01">일반</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="vote_indict_ty" id="vote_indict_ty_02" value="002">
+                                                    <label for="vote_indict_ty_02">블록</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <th scope="row">질문 순서 랜덤 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            입력한 모든 질문영역이 접속할때마다 랜덤으로 표출됩니다.
+                                        </div></i></th>
+                                        <td>
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="qestn_random_yn" id="qestn_random_yn_01" value="Y">
+                                                    <label for="qestn_random_yn_01">예</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="qestn_random_yn" id="qestn_random_yn_02" value="N" checked="checked">
+                                                    <label for="qestn_random_yn_02">아니오</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <th scope="row">총 투표수 설정 <i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+                                            각 질문별 답변의 선택수가 아닌 모든 질문의 투표수를 설정합니다. <br>*특수한경우에만 사용되며 일반적으로 사용되지 않습니다.<br> 해당기능에 대해 문의사항이 있으신분은 담당자에게 연락 부탁드립니다.
+                                        </div></i></th>
+                                        <td>
+                                            <ul class="v_list">
+                                                <li>
+                                                    <label for="ge_mxmm_choise">
+                                                        <input type="checkbox" class="" id="ge_mxmm_choise" name="ge_mxmm_choise" value="Y" disabled=""> 설정</label>
+                                                    <!-- 투표권 설정 체크시 활성화 -->
+                                                    <select id="ge_mxmm_choise_co" name="ge_mxmm_choise_co" class="form-control max_set" disabled=""><option value="1">1개</option></select>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="ge_qestn_form">
+                                	<h2 class="nvote_sub_tit">질문 1</h2>
+	                                <div class="form_tbl_ui_box vote_box1 type001" id="que_type_layer_1">
+	                                	<div class="form_tbl_ui_bx">
+		                                    <div class="form_tbl_ui qa">
+		                                        <div class="cell"><input type="text" class="form-control queInput" id="ge_qestn_sj_1" name="ge_qestn_sj_1" onkeyup="cfLengthCheck2(&#39;객관식 질문은&#39;, this, 110, 100);" placeholder="객관식 질문을 입력해 주세요. (최대 100자)"></div>
+		                                        <div class="cell">
+		                                            <select class="form-control" id="ge_qestn_se_1" name="ge_qestn_se_1" onchange="fnChangeQueType(&#39;1&#39;,this.value); return false;">
+		                                                <option value="001" selected="selected">객관식</option>
+		                                                <option value="002">주관식</option>
+		                                            </select>
+		                                        </div>
+		                                    </div>
+		                                </div>
+	                                    <div class="form_tbl_ui_gr type2">
+		                                    <div class="form_tbl_ui qa">
+		                                        <div class="cell inc_del">
+                                                    <span class="cell_ico"></span>
+		                                            <input type="text" class="form-control ansInput" id="ge_answer_11" name="ge_answer_1" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+		                                            <input type="hidden" id="ge_popup_sj_1_1" name="ge_popup_sj_1_1">
+		                                            <input type="hidden" id="ge_popup_cn_1_1" name="ge_popup_cn_1_1">
+		                                            <input type="hidden" id="ge_popup_url_at_1_1" name="ge_popup_url_at_1_1" value="N">
+		                                            <input type="hidden" id="ge_etc_yn_1_1" name="ge_etc_yn_1_1" value="N">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_11" name="ge_attImgFileInfo_1_1" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_12" name="ge_attImgFileInfo_1_1" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_13" name="ge_attImgFileInfo_1_1" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_14" name="ge_attImgFileInfo_1_1" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_15" name="ge_attImgFileInfo_1_1" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_16" name="ge_attImgFileInfo_1_1" value="">
+		                                            <button type="button" class="del" onclick="fnAnsDelete(this,1);" style="display:none"></button>
+		                                        </div>
+		                                        <div class="cell">
+		                                            <button type="button" class="btn btn-gray" onclick="fnOpenAnswerDetail(this,&#39;1_1&#39;);"><i class="fa fa-commenting-o fz15"></i> 답변 상세 입력</button>
+		                                        </div>
+		                                    </div>
+		                                    <div class="form_tbl_ui qa">
+		                                        <div class="cell inc_del">
+                                                    <span class="cell_ico"></span>
+		                                            <input type="text" class="form-control ansInput" id="ge_answer_12" name="ge_answer_1" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+		                                            <input type="hidden" id="ge_popup_sj_1_2" name="ge_popup_sj_1_2">
+		                                            <input type="hidden" id="ge_popup_cn_1_2" name="ge_popup_cn_1_2">
+		                                            <input type="hidden" id="ge_popup_url_at_1_2" name="ge_popup_url_at_1_2" value="N">
+		                                            <input type="hidden" id="ge_etc_yn_1_2" name="ge_etc_yn_1_2" value="N">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_21" name="ge_attImgFileInfo_1_2" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_22" name="ge_attImgFileInfo_1_2" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_23" name="ge_attImgFileInfo_1_2" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_24" name="ge_attImgFileInfo_1_2" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_25" name="ge_attImgFileInfo_1_2" value="">
+		                                            <input type="hidden" class="form-control" id="ge_attImgFileInfo_1_26" name="ge_attImgFileInfo_1_2" value="">
+		                                            <button type="button" class="del" onclick="fnAnsDelete(this,1);" style="display:none"></button>
+		                                        </div>
+		                                        <div class="cell">
+		                                            <button type="button" class="btn btn-gray" onclick="fnOpenAnswerDetail(this,&#39;1_2&#39;);"><i class="fa fa-commenting-o fz15"></i> 답변 상세 입력</button>
+		                                        </div>
+		                                    </div>
+		                                </div>
+	                                    <div class="form_tbl_ui qa re_arr">
+	                                        <div class="cell arr_fl">
+	                                            <button type="button" class="btn btn-default btn-sm" onclick="fnAddAns(this,1); return false;">답변추가 +</button>
+	                                            <button type="button" class="btn btn-default btn-sm" onclick="fnAddAns2(this,1); return false;">기타추가 +</button>
+	                                        </div>
+	                                        <div class="cell arr_fr">
+	                                            <div class="lbl_slt_set">
+	                                              	답변 순서 랜덤 <i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+														입력한 모든 답변영역이 접속할때마다 랜덤으로 표출됩니다.
+													</div></i>
+	                                                <select class="form-control" id="ge_answer_random_yn_1" name="ge_answer_random_yn_1">
+	                                                    <option value="Y">네</option>
+	                                                    <option value="N" selected="">아니오</option>
+	                                                </select>
+													<input type="hidden" id="ge_answer_co_1" name="ge_answer_co_1" value="2">
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form_tbl_ui">
+	                                    	<div class="cell ta_l">
+	                                            <button class="btn bg-purple2 btn-addque" type="button" onclick="fnAddQueType001(this);">질문 추가</button>
+	                                            <button class="btn btn-warning" type="button" onclick="fnQueCopy(this);">질문 복사</button>
+	                                            <button class="btn btn-foursquare" type="button" onclick="fnQueDelete(this);" style="display:none;">질문 삭제</button>
+	                                        </div>
+	                                        <div class="cell ta_r">
+	                                            <div class="lbl_slt_set">
+	                                               	<label for="ge_anse_mumm_choise_co_1">답변 최소 선택 수<i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+														답변의 최소, 최대 선택값을 정할 수 있습니다. 최소,최대 1개 선택시 필수 1개만 선택되는 일반적인 투표가 만들어 집니다.
+													</div></i></label>
+	                                                <select id="ge_anse_mumm_choise_co_1" name="ge_anse_mumm_choise_co_1" class="form-control"><option value="0">0개</option><option value="1" selected="selected">1개</option><option value="2">2개</option></select>
+	                                            </div>
+	                                            <div class="lbl_slt_set">
+	                                               	<label for="ge_anse_mxmm_choise_co_1">답변 최대 선택 수<i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+														답변의 최소, 최대 선택값을 정할 수 있습니다. 최소,최대 1개 선택시 필수 1개만 선택되는 일반적인 투표가 만들어 집니다.
+													</div></i></label>
+	                                                <select id="ge_anse_mxmm_choise_co_1" name="ge_anse_mxmm_choise_co_1" class="form-control"><option value="1" selected="selected">1개</option><option value="2">2개</option></select>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                            	</div>
+                            	</div>
+                            </div>
+                            <!-- // box -->
+
+                            <!-- box -->
+                            <div class="box box-primary">
+                                <h2 class="nvote_sub_tit">추가 사항</h2>
+
+                                <table class="table table-bordered th_relative">
+                                    <colgroup>
+                                        <col style="width: 150px;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">투표 취지 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표에 대한 간단한 취지를 입력 할 수 있습니다. 일반적으로 투표의 기간 및 대상, 투표를 진행하는 부서 등의 정보를 입력합니다.
+                                        </div></i></th>
+                                        <td>
+                                                <textarea class="form-control" rows="6" id="vote_dc" name="vote_dc" placeholder="투표기간 :
+참여대상 :
+진행부서 : 000-0000-0000(전화번호)
+운영목적 :
+관련현황 :
+(최대  1000자)" onkeyup="cfLengthCheck2(&#39;투표 취지는&#39;, this, 1100, 1000);" style="resize:none;"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">자세히보기 URL <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표에 대한 관련 사이트가 있다면 입력합니다. 사용자 화면에서 버튼으로 표현되며 새창으로 입력된 URL을 표출합니다.
+                                        </div></i></th>
+                                        <td>
+                                            <input type="text" class="form-control" id="link_url" name="link_url" onkeyup="cfLengthCheck2(&#39;URL은&#39;, this, 200, 200);" placeholder="URL을 입력해 주세요.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">투표 기간 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표의 기간을 설정하며 "분"단위까지 설정합니다.<br>투표의 기본 설정값은 접속당일 오전 09:00 ~ 일주일 후 오전 09:00 입니다.
+                                        </div></i></th>
+                                        <td>
+                                            <div class="cal_fl">
+                                                <span>시작일</span>
+                                                <input type="hidden" id="begin_dt" name="begin_dt" value="">
+                                                <input type="hidden" id="end_dt" name="end_dt" value="">
+                                                <div class="calendar_box">
+                                                    <input type="text" class="form-control input-sm hasDatepicker" id="sch_st_date" name="sch_st_date" value="" readonly="readonly">
+                                                    <button class="btn btn-default" id="sch_st_date_btn" type="button"><i class="fa fa-calendar"></i></button>
+                                                </div>
+                                                <div class="cal_select02">
+                                                    <select class="form-control input-sm" id="st_hour" name="st_hour">
+
+
+                                                        <option value="00">00</option>
+
+
+                                                        <option value="01">01</option>
+
+
+                                                        <option value="02">02</option>
+
+
+                                                        <option value="03">03</option>
+
+
+                                                        <option value="04">04</option>
+
+
+                                                        <option value="05">05</option>
+
+
+                                                        <option value="06">06</option>
+
+
+                                                        <option value="07">07</option>
+
+
+                                                        <option value="08">08</option>
+
+
+                                                        <option value="09" selected="selected">09</option>
+
+
+                                                        <option value="10">10</option>
+
+
+                                                        <option value="11">11</option>
+
+
+                                                        <option value="12">12</option>
+
+
+                                                        <option value="13">13</option>
+
+
+                                                        <option value="14">14</option>
+
+
+                                                        <option value="15">15</option>
+
+
+                                                        <option value="16">16</option>
+
+
+                                                        <option value="17">17</option>
+
+
+                                                        <option value="18">18</option>
+
+
+                                                        <option value="19">19</option>
+
+
+                                                        <option value="20">20</option>
+
+
+                                                        <option value="21">21</option>
+
+
+                                                        <option value="22">22</option>
+
+
+                                                        <option value="23">23</option>
+
+                                                    </select>
+                                                    <select class="form-control input-sm" id="st_min" name="st_min">
+
+
+                                                        <option value="00">00</option>
+
+
+                                                        <option value="01">01</option>
+
+
+                                                        <option value="02">02</option>
+
+
+                                                        <option value="03">03</option>
+
+
+                                                        <option value="04">04</option>
+
+
+                                                        <option value="05">05</option>
+
+
+                                                        <option value="06">06</option>
+
+
+                                                        <option value="07">07</option>
+
+
+                                                        <option value="08">08</option>
+
+
+                                                        <option value="09">09</option>
+
+
+                                                        <option value="10">10</option>
+
+
+                                                        <option value="11">11</option>
+
+
+                                                        <option value="12">12</option>
+
+
+                                                        <option value="13">13</option>
+
+
+                                                        <option value="14">14</option>
+
+
+                                                        <option value="15">15</option>
+
+
+                                                        <option value="16">16</option>
+
+
+                                                        <option value="17">17</option>
+
+
+                                                        <option value="18">18</option>
+
+
+                                                        <option value="19">19</option>
+
+
+                                                        <option value="20">20</option>
+
+
+                                                        <option value="21">21</option>
+
+
+                                                        <option value="22">22</option>
+
+
+                                                        <option value="23">23</option>
+
+
+                                                        <option value="24">24</option>
+
+
+                                                        <option value="25">25</option>
+
+
+                                                        <option value="26">26</option>
+
+
+                                                        <option value="27">27</option>
+
+
+                                                        <option value="28">28</option>
+
+
+                                                        <option value="29">29</option>
+
+
+                                                        <option value="30">30</option>
+
+
+                                                        <option value="31">31</option>
+
+
+                                                        <option value="32">32</option>
+
+
+                                                        <option value="33">33</option>
+
+
+                                                        <option value="34">34</option>
+
+
+                                                        <option value="35">35</option>
+
+
+                                                        <option value="36">36</option>
+
+
+                                                        <option value="37">37</option>
+
+
+                                                        <option value="38">38</option>
+
+
+                                                        <option value="39">39</option>
+
+
+                                                        <option value="40">40</option>
+
+
+                                                        <option value="41">41</option>
+
+
+                                                        <option value="42">42</option>
+
+
+                                                        <option value="43">43</option>
+
+
+                                                        <option value="44">44</option>
+
+
+                                                        <option value="45">45</option>
+
+
+                                                        <option value="46">46</option>
+
+
+                                                        <option value="47">47</option>
+
+
+                                                        <option value="48">48</option>
+
+
+                                                        <option value="49">49</option>
+
+
+                                                        <option value="50">50</option>
+
+
+                                                        <option value="51">51</option>
+
+
+                                                        <option value="52">52</option>
+
+
+                                                        <option value="53">53</option>
+
+
+                                                        <option value="54">54</option>
+
+
+                                                        <option value="55">55</option>
+
+
+                                                        <option value="56">56</option>
+
+
+                                                        <option value="57">57</option>
+
+
+                                                        <option value="58">58</option>
+
+
+                                                        <option value="59">59</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="cal_fl nth02">
+                                                <span>종료일</span>
+                                                <div class="calendar_box">
+                                                    <input type="text" class="form-control input-sm hasDatepicker" id="sch_ed_date" name="sch_ed_date" value="" readonly="readonly">
+                                                    <button class="btn btn-default" id="sch_ed_date_btn" type="button"><i class="fa fa-calendar"></i></button>
+                                                </div>
+                                                <div class="cal_select02">
+                                                    <select class="form-control input-sm" id="ed_hour" name="ed_hour">
+
+
+                                                        <option value="00">00</option>
+
+
+                                                        <option value="01">01</option>
+
+
+                                                        <option value="02">02</option>
+
+
+                                                        <option value="03">03</option>
+
+
+                                                        <option value="04">04</option>
+
+
+                                                        <option value="05">05</option>
+
+
+                                                        <option value="06">06</option>
+
+
+                                                        <option value="07">07</option>
+
+
+                                                        <option value="08">08</option>
+
+
+                                                        <option value="09" selected="selected">09</option>
+
+
+                                                        <option value="10">10</option>
+
+
+                                                        <option value="11">11</option>
+
+
+                                                        <option value="12">12</option>
+
+
+                                                        <option value="13">13</option>
+
+
+                                                        <option value="14">14</option>
+
+
+                                                        <option value="15">15</option>
+
+
+                                                        <option value="16">16</option>
+
+
+                                                        <option value="17">17</option>
+
+
+                                                        <option value="18">18</option>
+
+
+                                                        <option value="19">19</option>
+
+
+                                                        <option value="20">20</option>
+
+
+                                                        <option value="21">21</option>
+
+
+                                                        <option value="22">22</option>
+
+
+                                                        <option value="23">23</option>
+
+                                                    </select>
+                                                    <select class="form-control input-sm" id="ed_min" name="ed_min">
+
+
+                                                        <option value="00">00</option>
+
+
+                                                        <option value="01">01</option>
+
+
+                                                        <option value="02">02</option>
+
+
+                                                        <option value="03">03</option>
+
+
+                                                        <option value="04">04</option>
+
+
+                                                        <option value="05">05</option>
+
+
+                                                        <option value="06">06</option>
+
+
+                                                        <option value="07">07</option>
+
+
+                                                        <option value="08">08</option>
+
+
+                                                        <option value="09">09</option>
+
+
+                                                        <option value="10">10</option>
+
+
+                                                        <option value="11">11</option>
+
+
+                                                        <option value="12">12</option>
+
+
+                                                        <option value="13">13</option>
+
+
+                                                        <option value="14">14</option>
+
+
+                                                        <option value="15">15</option>
+
+
+                                                        <option value="16">16</option>
+
+
+                                                        <option value="17">17</option>
+
+
+                                                        <option value="18">18</option>
+
+
+                                                        <option value="19">19</option>
+
+
+                                                        <option value="20">20</option>
+
+
+                                                        <option value="21">21</option>
+
+
+                                                        <option value="22">22</option>
+
+
+                                                        <option value="23">23</option>
+
+
+                                                        <option value="24">24</option>
+
+
+                                                        <option value="25">25</option>
+
+
+                                                        <option value="26">26</option>
+
+
+                                                        <option value="27">27</option>
+
+
+                                                        <option value="28">28</option>
+
+
+                                                        <option value="29">29</option>
+
+
+                                                        <option value="30">30</option>
+
+
+                                                        <option value="31">31</option>
+
+
+                                                        <option value="32">32</option>
+
+
+                                                        <option value="33">33</option>
+
+
+                                                        <option value="34">34</option>
+
+
+                                                        <option value="35">35</option>
+
+
+                                                        <option value="36">36</option>
+
+
+                                                        <option value="37">37</option>
+
+
+                                                        <option value="38">38</option>
+
+
+                                                        <option value="39">39</option>
+
+
+                                                        <option value="40">40</option>
+
+
+                                                        <option value="41">41</option>
+
+
+                                                        <option value="42">42</option>
+
+
+                                                        <option value="43">43</option>
+
+
+                                                        <option value="44">44</option>
+
+
+                                                        <option value="45">45</option>
+
+
+                                                        <option value="46">46</option>
+
+
+                                                        <option value="47">47</option>
+
+
+                                                        <option value="48">48</option>
+
+
+                                                        <option value="49">49</option>
+
+
+                                                        <option value="50">50</option>
+
+
+                                                        <option value="51">51</option>
+
+
+                                                        <option value="52">52</option>
+
+
+                                                        <option value="53">53</option>
+
+
+                                                        <option value="54">54</option>
+
+
+                                                        <option value="55">55</option>
+
+
+                                                        <option value="56">56</option>
+
+
+                                                        <option value="57">57</option>
+
+
+                                                        <option value="58">58</option>
+
+
+                                                        <option value="59">59</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">투표 대상 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            [안내]&nbsp;투표대상에 대한 설정을 합니다.<br>전체공개(휴대폰) : 가장 일반적인 투표이며 휴대폰번호 인증으로만 투표를 진행 가능합니다.<br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ※ 휴대폰이 3개일 경우 3표 행사 가능<br>전체공개(소셜, 휴대폰) : 휴대폰번호,소셜인증으로 투표를 받습니다.<br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ※ 휴대폰이 3개일 경우 + 소셜 아이디 3개일 경우 6표 행사 가능<br>전체공개(통합인증 - 시민카드) : 서울시 본인인증으로 투표합니다. 1인 1투표가 가능합니다.<br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ※ 시민카드 앱 설치 및 회원가입-&gt;인증서 발급 이 필요합니다.<br>전체공개(통합인증 - 시민카드,나이스) : 서울시 본인인증 및 나이스 본인인증으로 투표합니다. 1인 1투표가 가능합니다.<br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;※ 시민카드설치가 부담스러운경우 나이스를 병행하여 투표가 가능합니다.나이스 인증은 시민 대부분 설치되어 있습니다.<br>특정인 : 전화번호 명부를 업로드하거나 지역정보, 위치정보를 선택하여 해당 조건을 충족하는 특정인을 대상으로 투표를 진행할 수 있습니다.<br>비공개 투표(휴대폰) : 비밀번호를 설정하여 비밀번호를 아는 경우에만 휴대폰 인증으로 투표 할 수 있습니다.<br>비공개 투표(소셜, 휴대폰) : 비밀번호를 설정하여 비밀번호를 아는 경우에만 휴대폰 인증또는 소셜 아이디로 투표 할 수 있습니다.<br>"선택사항이 팝업창으로 표시됩니다. 팝업 차단을 해제하여 주십시오."
+                                        </div></i></th>
+                                        <td colspan="3">
+                                            <div class="form_tbl_ui vtarget">
+                                                <div class="cell modi_w280">
+                                                    <select class="form-control modi_w280" name="othbc_trget">
+                                                        <option value="004">전체공개(휴대폰)</option>
+                                                        <option value="001">전체공개(휴대폰, 소셜)</option>
+                                                        <!-- <option value="008">전체공개(통합인증 - 시민카드)</option>
+                                                        <option value="009">전체공개(통합인증 - 시민카드, 나이스)</option> -->
+                                                        <option value="002">특정인</option>
+                                                        <option value="003">비공개 투표(휴대폰)</option>
+                                                        <option value="005">비공개 투표(휴대폰, 소셜)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="cell modi_w280" id="trget_type_cell" style="display: none;">
+                                                    <select class="form-control" id="trget_type" name="trget_type">
+                                                        <option value="012">연락처 엑셀파일 업로드</option>
+                                                        <option value="011">최근목록 불러오기</option>
+                                                        <option value="02">회원 지역정보 대상</option>
+                                                        <option value="03">GPS 위치정보 대상</option>
+                                                    </select>
+                                                </div>
+                                                <div id="trget_btn_cell" class="cell btn_c" style="display: none;">
+                                                    <button class="btn btn btn-primary" type="button" onclick="fnOpenTrgetPopup();"><i class="fa fa-search"></i> 찾기</button>
+                                                </div>
+                                                <div class="cell cell_input_box btn_box" id="targetSource_cell" style="display: none;">
+                                                    <input type="text" id="targetSource" name="targetSource" class="form-control" readonly="readonly">
+                                                    <input type="hidden" id="submittargetSource" name="submittargetSource" class="form-control input-sm">
+                                                    <input type="hidden" id="distanceValue" class="form-control input-sm">
+                                                    <input type="hidden" id="mgis_address" readonly="readonly" class="form-control input-sm">
+                                                    <input type="hidden" id="mgis_address_new" readonly="readonly" class="form-control input-sm">
+                                                    <input type="hidden" id="mgis_address_old" readonly="readonly" class="form-control input-sm">
+                                                    <input type="hidden" id="mgis_latitude" readonly="readonly" class="form-control input-sm">
+                                                    <input type="hidden" id="mgis_longitude" readonly="readonly" class="form-control input-sm">
+                                                    <input type="hidden" id="mgis_cdata" readonly="readonly" class="form-control input-sm">
+                                                    <button type="button" class="btn btn-success">대상자확인</button>
+                                                </div>
+                                                <div class="cell password_cell modi_w280" style="display: none;">
+                                                    <input id="vote_password" name="vote_password" type="number" max="9999" min="0" class="form-control" placeholder="숫자 4자리 비밀번호를 입력해 주세요." onkeyup="cfLengthCheck2(&#39;비밀번호는&#39;, this, 4, 4);">
+                                                </div>
+                                                <div class="cell password_cell modi_w280" style="display: none;">
+                                                    <input id="vote_password_confirm" type="number" max="9999" min="0" class="form-control" placeholder="비밀번호 확인 4자리를 입력해 주세요." onkeyup="cfLengthCheck2(&#39;비밀번호 확인은&#39;, this, 4, 4);">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                        <th scope="row">선착순 투표 설정 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            설정한 인원이 투표의 참여 시 투표가 자동종료 됩니다.
+                                        </div></i></th>
+
+                                        <td>
+
+                                            <label for="mxmm_vote_cnt"><input type="checkbox" id="mxmm_vote_cnt"> 설정</label>
+
+                                            <input type="text" id="mxmm_vote_co" name="mxmm_vote_co" class="form-control max_set" disabled="disabled">
+
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">투표의 표시범위 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            API 기능 사용시에만 노출되며 등록되는 투표가 엠보팅, 또는 본인의 API 사이트에 노출되는 여부를 선택 합니다.
+                                        </div></i></th>
+                                        <td>
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="vote_inqire_ty" id="vote_inqire_ty_01" value="001" checked="checked">
+                                                    <label for="vote_inqire_ty_01">엠보팅+API</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="vote_inqire_ty" id="vote_inqire_ty_02" value="002">
+                                                    <label for="vote_inqire_ty_02">엠보팅</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="vote_inqire_ty" id="vote_inqire_ty_03" value="003">
+                                                    <label for="vote_inqire_ty_03">API</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">전화번호 차단 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            해당투표에 투표하지 못하는 휴대폰 번호를 업로드 합니다.<br>휴대폰 인증 투표에만 사용 가능하며 꼭! 양식받기를 하여 양식에 맞는 휴대폰 번호를 업로드 해주세요<br>* 엑셀( *.xls ) 확장자만 지원 , (-,/) 등 특수문자는 입력 불가능<br>예) 01000000000 ( 0 ) , 010-0000-0000 ( X )
+                                        </div></i></th>
+                                        <td>
+                                            <button type="button" onclick="fnTampletBlockNumDown();" class="btn btn-success"><i class="fa fa-file-excel-o"></i> 양식받기</button>
+                                            <input type="file" class="ib_file" id="excelFileBlockNum" name="excelFileBlockNum">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">재 투표 가능 여부 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표 종료 시 까지 여러 번 투표가 가능하게 설정합니다. 저장되는 투표는 마지막 투표만 저장되며 마지막 투표만 인정됩니다.
+                                        </div></i>
+                                        </th>
+                                        <td>
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="vote_gubun" id="vote_gubun_000" value="000" checked="checked">
+                                                    <label for="vote_gubun_000">불가능</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="vote_gubun" id="vote_gubun_001" value="001">
+                                                    <label for="vote_gubun_001">가능</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- // box -->
+                            <!-- box -->
+                            <div class="box box-primary">
+                                <h2 class="nvote_sub_tit">기타 옵션</h2>
+
+                                <table class="table table-bordered th_relative">
+                                    <colgroup>
+                                        <col style="width: 150px;">
+                                        <col style="width: auto;">
+                                        <col style="width: 150px;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">결과노출 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표의 결과노출 설정입니다. <br>참여시 결과노출 : 투표 참여 시 투표 참여자는 실시간 득표수 확인이 가능합니다.<br>마감후 결과노출 : 투표 마감 이후에 모든 시민이 투표결과를 확인할 수 있습니다.<br>결과노출 안함 : 투표 마감 이후에도 관리자를 제외한 시민들은 투표결과를 확인할 수 없습니다.
+                                        </div></i></th>
+                                        <td colspan="3">
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="progrs_middl_result" id="vote_radio02_01" value="R" checked="checked">
+                                                    <label for="vote_radio02_01">참여시 결과 노출</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="progrs_middl_result" id="vote_radio02_02" value="E">
+                                                    <label for="vote_radio02_02">마감후 결과노출</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="progrs_middl_result" id="vote_radio02_03" value="N">
+                                                    <label for="vote_radio02_03">결과노출 안함</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">투표발제자 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            투표상에 노출되는 투표 발제자의 이름입니다. 일반적으로 부서명 또는 기관명을 입력 합니다.
+                                        </div></i></th>
+                                        <td>
+                                            <input type="text" class="form-control" id="vote_crtr" name="vote_crtr" value="" onkeyup="cfLengthCheck2(&#39;투표발제자는&#39;, this, 55, 50);" placeholder="투표를 진행하는 부서 또는 담장자명을 입력해 주세요 (최대 50자)">
+                                        </td>
+                                        <th scope="row">등록자</th>
+                                        <td>
+                                            <input type="text" class="form-control" readonly="readonly" value="관리자">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">통계 정보 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            사용자가 직접 입력하는 [생년],[성별],[지역] 정보로, 받도록 설정할 경우 정보를 입력하지 않으면 투표에 참여할 수 없습니다.
+                                        </div></i></th>
+                                        <td colspan="3">
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="stats_colct_yn" id="vote_radio03_01" value="Y">
+                                                    <label for="vote_radio03_01">받음</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="stats_colct_yn" id="vote_radio03_02" value="N" checked="checked">
+                                                    <label for="vote_radio03_02">받지 않음</label>
+                                                </li>
+                                                <li class="statColctDisplay" style="display: none">
+                                                    <input type="checkbox" name="stats_colct_group" id="stats_colct_group_A" value="A">
+                                                    <label for="stats_colct_group_A">생년</label>
+                                                </li>
+                                                <li class="statColctDisplay" style="display: none">
+                                                    <input type="checkbox" name="stats_colct_group" id="stats_colct_group_B" value="B">
+                                                    <label for="stats_colct_group_B">성별</label>
+                                                </li>
+                                                <li class="statColctDisplay" style="display: none">
+                                                    <input type="checkbox" name="stats_colct_group" id="stats_colct_group_C" value="C">
+                                                    <label for="stats_colct_group_C">지역</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">댓글 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                            사용자가 댓글을 작성할 수 있는지에 대한 설정을 합니다. "받지않음" 선택시 댓글란은 비노출 됩니다.
+                                        </div></i></th>
+                                        <td colspan="3">
+                                            <ul class="v_list">
+                                                <li>
+                                                    <input type="radio" name="answer_yn" id="vote_radio04_01" value="Y" checked="checked">
+                                                    <label for="vote_radio04_01">받음</label>
+                                                </li>
+                                                <li>
+                                                    <input type="radio" name="answer_yn" id="vote_radio04_02" value="N">
+                                                    <label for="vote_radio04_02">받지 않음</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- // box -->
+
+                            <!-- box -->
+                            <div class="box box-primary">
+                                <h2 class="nvote_sub_tit">태그 입력 <i class="fa fa-exclamation-circle btn_help"><div class="help_box">
+                                    투표를 표현하는 태그를 입력해 주세요!<br>입력한 태그는 엠보팅 알고리즘으로 사용자에게 맞춤형 투표로 추천됩니다.
+                                </div></i></h2>
+
+                                <div class="form_tbl_ui tag">
+                                    <div class="cell">
+                                        <input type="text" class="form-control" id="vote_tag_nm_in" name="vote_tag_nm_in" value="" onkeyup="if(window.event.keyCode == 13){ fnTagAdd(); } else {cfLengthCheck2(&#39;태그는&#39;, this, 50, 50);}" placeholder="태그를 입력해 주세요.">
+                                    </div>
+                                    <div class="cell">
+                                        <button type="button" class="btn btn-gray" onclick="fnTagAdd();"><i class="fa fa-pencil"></i> 태그입력</button>
+                                    </div>
+                                </div>
+                                <ul class="tag_input_list">
+                                </ul>
+                            </div>
+                            <!-- // box -->
+                        </div>
+                        <!-- // new_vote_reg_wrap -->
+
+                        <div class="pull-right">
+                            <button class="btn btn-success" type="button" onclick="fnGoInsert(&#39;temp&#39;); return false;"><i class="fa fa-save"></i> 임시저장</button>
+                            <button class="btn btn-info" type="button" onclick="fnGoInsert(&#39;save&#39;); return false;"> <i class="fa fa-pencil"></i> 투표발제</button>
+                        </div>
+                        <div style="display: none;">
+                            <input type="file" id="submitTargetSourceExcelFile" name="submitTargetSourceExcelFile">
+                        </div>
+                    </form>
+                </div>
+                <!-- // 사용자 정보 -->
+            </div>
+            <!-- //content -->
+        </section>
+    </div>
+    <!-- footer -->
+
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- Default to the left -->
+        <strong>Copyright 2015. <a href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">Seoul Metropolitan Governament</a>.</strong> All rights reserved.
+    </footer>
+    <!--//footer -->
+</div>
+
+<!-- 히든 영역 -->
+
+
+<div style="display: none;">
+    <div id="que001Temp">
+		<div class="ge_qestn_form">
+        	<h2 class="nvote_sub_tit nvote_sub_tit_no">질문 1</h2>
+			<div class="form_tbl_ui_box vote_box1 type001" id="queTypee001Temp">
+				<div class="form_tbl_ui_bx">
+					<div class="form_tbl_ui qa">
+		               <div class="cell"><input type="text" class="form-control" id="" name="" onkeyup="cfLengthCheck2(&#39;객관식 질문은&#39;, this, 110, 100);" placeholder="객관식 질문을 입력해 주세요. (최대 100자)"></div>
+		               <div class="cell">
+		                 <select class="form-control" id="" name="" onchange="fnChangeQueType(&#39;1&#39;,this.value); return false;">
+		                   <option value="001" selected="selected">객관식</option>
+		                   <option value="002">주관식</option>
+		                  </select>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form_tbl_ui_gr type2">
+		            <div class="form_tbl_ui qa">
+		                <div class="cell inc_del">
+                            <span class="cell_ico"></span>
+		                    <input type="text" class="form-control" id="" name="" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+		                    <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="" value="N">
+	                        <input type="hidden" id="" name="" value="N">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <button type="button" class="del" onclick="fnAnsDelete(this, 1);"></button>
+		                </div>
+		                <div class="cell">
+		                    <button type="button" class="btn btn-gray" onclick="fnOpenAnswerDetail(this);"><i class="fa fa-commenting-o fz15"></i> 답변 상세 입력</button>
+		                </div>
+		            </div>
+		            <div class="form_tbl_ui qa type2">
+		                <div class="cell inc_del">
+                            <span class="cell_ico"></span>
+		                    <input type="text" class="form-control" id="" name="" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+		                    <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="" value="N">
+	                        <input type="hidden" id="" name="" value="N">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <input type="hidden" id="" name="">
+	                        <button type="button" class="del" onclick="fnAnsDelete(this, 1);"></button>
+		                </div>
+		                <div class="cell">
+		                    <button type="button" class="btn btn-gray" onclick="fnOpenAnswerDetail(this);"><i class="fa fa-commenting-o fz15"></i> 답변 상세 입력</button>
+		                </div>
+		            </div>
+		        </div>
+	            <div class="form_tbl_ui qa re_arr">
+	                <div class="cell arr_fl">
+	                    <button type="button" class="btn btn-default btn-sm">답변추가 +</button>
+	                    <button type="button" class="btn btn-default btn-sm">기타추가 +</button>
+	                </div>
+	                <div class="cell arr_fr">
+	                    <div class="lbl_slt_set">
+	                      	답변 순서 랜덤 <i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+														입력한 모든 답변영역이 접속할때마다 랜덤으로 표출됩니다.
+													</div></i>
+	                        <select class="form-control">
+	                            <option value="Y">네</option>
+	                            <option value="N" selected="">아니오</option>
+	                        </select>
+	                        <input type="hidden" id="" name="" value="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form_tbl_ui">
+	                <div class="cell ta_l">
+	                    <button class="btn bg-purple2 btn-addque" type="button" onclick="fnAddQueType001(this);">질문 추가</button>
+	                    <button class="btn btn-warning" type="button" onclick="fnQueCopy(this);">질문 복사</button>
+	                    <button class="btn btn-foursquare" type="button" onclick="fnQueDelete(this);">질문 삭제</button>
+	                </div>
+	                <div class="cell ta_r">
+	                    <div class="lbl_slt_set">
+	                       <label for="">답변 최소 선택 수<i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+														답변의 최소, 최대 선택값을 정할 수 있습니다. 최소,최대 1개 선택시 필수 1개만 선택되는 일반적인 투표가 만들어 집니다.
+													</div></i></label>
+	                        <select class="form-control">
+								<option value="0">0개</option>
+								<option value="1" selected="selected">1개</option>
+								<option value="2">2개</option>
+	                        </select>
+	                    </div>
+	                    <div class="lbl_slt_set">
+	                       	<label for="">답변 최대 선택 수<i class="fa fa-exclamation-circle btn_help"><div class="help_box ta_l">
+														답변의 최소, 최대 선택값을 정할 수 있습니다. 최소,최대 1개 선택시 필수 1개만 선택되는 일반적인 투표가 만들어 집니다.
+													</div></i></label>
+	                        <select class="form-control">
+								<option value="1" selected="selected">1개</option>
+								<option value="2">2개</option>
+	                        </select>
+	                    </div>
+	                </div>
+	            </div>
+			</div>
+		</div>
+    </div>
+    <div id="que002Temp">
+        <div class="vote_box1 type002" id="queTypee002Temp">
+            <div class="form_tbl_ui qa">
+                <div class="form_tbl_ui qa">
+                    <div class="cell"><input type="text" class="form-control" onkeyup="cfLengthCheck2(&#39;주관식 질문은&#39;, this, 110, 100);" placeholder="주관식 질문을 입력해 주세요. (최대 100자)"></div>
+                    <div class="cell">
+                        <select class="form-control" id="" name="">
+                            <option value="001">객관식</option>
+                            <option value="002" selected="selected">주관식</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form_tbl_ui">
+                    <div class="cell ta_l">
+                        <button class="btn bg-purple2" type="button" onclick="fnAddQueType001(this);">질문 추가</button>
+                        <button class="btn btn-warning" type="button" onclick="fnQueCopy(this);">질문 복사</button>
+                        <button class="btn btn-foursquare" type="button" onclick="fnQueDelete(this);">질문 삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addAnsBox">
+        <div class="form_tbl_ui qa type2">
+            <div class="cell inc_del">
+                <span class="cell_ico"></span>
+                <input type="text" class="form-control" onkeyup="cfLengthCheck2(&#39;투표 답변은&#39;, this, 110, 100);" placeholder="투표 답변을 입력해 주세요. (최대 100자)">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="" value="N">
+                <input type="hidden" id="" name="" value="N">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <button type="button" class="del" onclick="fnAnsDelete(this, 1);"></button>
+            </div>
+            <div class="cell">
+                <button type="button" class="btn btn-gray" onclick="fnOpenAnswerDetail(this);"><i class="fa fa-commenting-o"></i> 답변 상세 입력</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addAnsBox2">
+        <div class="form_tbl_ui qa type2">
+            <div class="cell inc_del">
+                <span class="cell_ico"></span>
+                <input type="text" class="form-control" value="기타..." placeholder="답변을 입력해 주세요." readonly="readonly">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="" value="N">
+                <input type="hidden" id="" name="" value="Y">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <input type="hidden" id="" name="">
+                <button type="button" class="del" onclick="fnAnsDelete(this, 1);"></button>
+            </div>
+            <div class="cell">
+                <button type="button" class="btn btn-gray" onclick="fnOpenAnswerDetail(this);"><i class="fa fa-commenting-o"></i> 답변 상세 입력</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <form name="ajaxFormVsImg" action="https://cmsmvoting.seoul.go.kr/admin/vote/uploadVsImgFileAjax.do" method="post">
+        <input type="file" id="temp_vsImgFile_1" name="temp_vsImgFile_1">
+        <input type="file" id="temp_vsImgFile_2" name="temp_vsImgFile_2">
+        <input type="text" id="temp_vsImgFile_idx" name="temp_vsImgFile_idx">
+    </form>
+
+    <form name="ajaxFormGeImg" action="https://cmsmvoting.seoul.go.kr/admin/vote/uploadGeImgFileAjax.do" method="post">
+        <input type="file" id="temp_geImgFile" name="temp_geImgFile">
+        <input type="text" id="temp_geImgFile_idx" name="temp_geImgFile_idx">
+    </form>
+
+    <form id="cform" name="cform" action="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="currentPage" value="">
+        <input type="hidden" id="vote_no" name="vote_no" value="">
+        <input type="hidden" id="othbc_trget" name="othbc_trget" value="">
+        <input type="hidden" id="mod_vote_sttus" name="mod_vote_sttus">
+    </form>
+
+    <!-- 검색관련 폼 -->
+    <form id="searchform" name="searchform" action="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#" method="post">
+        <input type="hidden" name="sch_type" value="">
+        <input type="hidden" name="sch_text" value="">
+        <input type="hidden" name="sch_gu_nm" value="">
+        <input type="hidden" name="vote_se" value="">
+        <input type="hidden" name="othbc_trget_all" value="">
+        <input type="hidden" name="othbc_trget_001" value="">
+        <input type="hidden" name="othbc_trget_002" value="">
+        <input type="hidden" name="othbc_trget_003" value="">
+        <input type="hidden" name="vote_sttus_all" value="">
+        <input type="hidden" name="vote_sttus_007" value="">
+        <input type="hidden" name="vote_sttus_004" value="">
+        <input type="hidden" name="vote_sttus_005" value="">
+        <input type="hidden" name="vote_sttus_006" value="">
+        <input type="hidden" name="vote_sttus_999" value="">
+        <input type="hidden" name="date_all_yn" value="">
+        <input type="hidden" name="sch_st_date" value="">
+        <input type="hidden" name="sch_ed_date" value="">
+        <input type="hidden" name="rowPerPage" value="">
+        <input type="hidden" name="currentPage" value="">
+        <input type="hidden" name="userdoc_seq" value="">
+    </form>
+</div>
+
+
+<!-- //히든 영역 -->
+
+
+
+
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all"><a class="ui-datepicker-prev ui-corner-all" data-handler="prev" data-event="click" title="이전달"><span class="ui-icon ui-icon-circle-triangle-w">이전달</span></a><a class="ui-datepicker-next ui-corner-all" data-handler="next" data-event="click" title="다음달"><span class="ui-icon ui-icon-circle-triangle-e">다음달</span></a><div class="ui-datepicker-title"><select class="ui-datepicker-year" data-handler="selectYear" data-event="change"><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021" selected="selected">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option></select><select class="ui-datepicker-month" data-handler="selectMonth" data-event="change" style="color: rgb(34, 34, 34);"><option value="0">1월</option><option value="1" selected="selected">2월</option><option value="2">3월</option><option value="3">4월</option><option value="4">5월</option><option value="5">6월</option><option value="6">7월</option><option value="7">8월</option><option value="8">9월</option><option value="9">10월</option><option value="10">11월</option><option value="11">12월</option></select></div></div><table class="ui-datepicker-calendar"><thead><tr><th class="ui-datepicker-week-end"><span title="일">일</span></th><th><span title="월">월</span></th><th><span title="화">화</span></th><th><span title="수">수</span></th><th><span title="목">목</span></th><th><span title="금">금</span></th><th class="ui-datepicker-week-end"><span title="토">토</span></th></tr></thead><tbody><tr><td class=" ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">1</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">2</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">3</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">4</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">5</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">6</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">7</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">8</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">9</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">10</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">11</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">12</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">13</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">14</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">15</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">16</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">17</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">18</a></td><td class="  ui-datepicker-today" data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default ui-state-highlight" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">19</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">20</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">21</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">22</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">23</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">24</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">25</a></td><td class="  ui-datepicker-current-day" data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default ui-state-active" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">26</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">27</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="1" data-year="2021"><a class="ui-state-default" href="https://cmsmvoting.seoul.go.kr/admin/vote/insertFormVoteMgt.do#">28</a></td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td></tr></tbody></table></div></body></html>
